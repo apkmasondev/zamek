@@ -55,6 +55,12 @@
 .accessible #hotspots {position:absolute;right:5vw;bottom:100px;z-index:6;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
 .accessible .hotspot {position:static;transform:none;flex-direction:row}
 @media(max-width:600px) {.accessible #hotspots {bottom:auto;top:80px;right:16px}}
+/* Music toggle: a speaker with sound waves when playing, a crossed speaker when silent, plus a text label on wider screens. */
+#sound {display:flex;align-items:center;gap:8px;font-size:12px}
+#sound .sound-icon {width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+#sound .sound-icon .speaker {fill:currentColor;stroke:none}
+#sound[aria-pressed="true"] .sound-off, #sound[aria-pressed="false"] .sound-waves {display:none}
+@media(max-width:600px) {#sound .sound-label {display:none}#sound .sound-icon {width:21px;height:21px}}
 /* On phones the plan is narrow: keep place names inside their outlines. */
 @media(max-width:600px) {.map-label {font-size:6.5px;letter-spacing:.1px}.map-label small {font-size:5.5px;letter-spacing:1px}}
 @media(min-width:601px) {

@@ -6,7 +6,6 @@ export function initMusic(audio, button, announce) {
     button.setAttribute('aria-pressed', String(enabled));
     button.setAttribute('aria-label', `${enabled ? 'Wyłącz' : 'Włącz'} muzykę`);
     button.title = `Castello della Scienza · ${enabled ? 'wyłącz' : 'włącz'} muzykę`;
-    button.querySelector('.sound-off').hidden = enabled;
   }
   function fade(target, pause = false) {
     cancelAnimationFrame(fadeFrame);
