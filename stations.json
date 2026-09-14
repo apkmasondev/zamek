@@ -67,7 +67,7 @@
     ],
     "video": "02-czas",
     "videoStatus": "illustration",
-    "videoNote": "Artystyczna ilustracja ruchu wahadła i powtarzalności zjawisk. Film nie służy do pomiaru czasu.",
+    "videoNote": "Artystyczna ilustracja historii pomiaru czasu: zegar słoneczny, zegar wahadłowy, kryształ kwarcu i pulsujące atomy. Siatka atomów jest umowna — nie pokazuje budowy zegara atomowego.",
     "interaction": "Zmień rytm wahadła",
     "control": "Długość wahadła",
     "unit": "m",
@@ -75,7 +75,7 @@
     "max": 4,
     "value": 2,
     "acceptedBy": "user",
-    "acceptedOn": "2026-09-13"
+    "acceptedOn": "2026-09-15"
   },
   {
     "id": 3,
