@@ -9,16 +9,16 @@ export const states=['Ciało stałe','Ciecz','Gaz'];
 export const formatPl=(n,digits)=>n.toFixed(digits).replace('.',',');
 export function explanation(id,v){
  switch(id){
- case 1:return 'Pryzmat rozdziela barwy obecne w świetle. Suwak zmienia czytelność schematu, nie właściwości szkła.';
- case 2:return `Przy długości ${formatPl(v,1)} m jeden pełny okres trwa około ${formatPl(pendulumPeriod(v),2)} s. Dłuższe wahadło kołysze się wolniej.`;
- case 3:return 'Satelita ma prędkość skierowaną w bok i jednocześnie spada ku Ziemi. Schemat pokazuje orbitę kołową bez skali.';
- case 4:{const c=collision(v);return `Po zderzeniu: v₁ = ${formatPl(c.v1,2)} m/s, v₂ = ${formatPl(c.v2,2)} m/s. Suma pędu pozostaje równa 1 kg·m/s.`;}
- case 5:{const e=energyBalance(v);return `${e.useful.toFixed(0)} jednostek energii użytecznej + ${e.environment.toFixed(0)} jednostek przekazanych otoczeniu = 100 jednostek wejściowych.`;}
- case 6:{const c=circuit(v);return `Przy oporze 10 Ω: prąd ${formatPl(c.current,2)} A, moc ${formatPl(c.power,2)} W. ${v===0?'Przy zerowym napięciu prąd nie płynie.':'Ładunek krąży; energia jest przekazywana odbiornikowi.'}`;}
- case 7:return 'Obrót magnesu zmienia kierunek jego pola względem obserwatora. Linie wracają przez wnętrze magnesu.';
- case 8:return ['Uporządkowanie nie oznacza bezruchu: cząsteczki ciała stałego drgają.','W cieczy bliscy sąsiedzi zmieniają się. Cząsteczki nie zamieniają się w większe kulki.','W gazie cząsteczki są znacznie bardziej oddalone i poruszają się w różnych kierunkach.'][Math.round(v)];
- case 9:return ['DNA jest matrycą do wytwarzania RNA. To etap transkrypcji.','Powstałe mRNA przenosi sekwencję odczytywaną przez rybosom.','Rybosom łączy aminokwasy w łańcuch białkowy. To etap translacji.'][Math.round(v)];
- case 10:return v<.5?'„Zamek na wzgórzu ma…” — inny kontekst zmienia możliwe dokończenia. Pokazane liczby są ręcznie ustaloną ilustracją.':'„Zamek w drzwiach ma…” — te same litery „zamek”, inne otoczenie tekstu. Pokazane liczby nie pochodzą z LLM.';
+ case 1:return 'Pryzmat rozdziela barwy obecne w białym świetle. Suwak rozsuwa wachlarz na rysunku, żeby łatwiej było je rozróżnić; w prawdziwym pryzmacie rozszczepienie zależy od rodzaju szkła.';
+ case 2:return `Przy długości ${formatPl(v,1)} m jedno pełne wahnięcie tam i z powrotem trwa około ${formatPl(pendulumPeriod(v),2)} s. Dłuższe wahadło kołysze się wolniej.`;
+ case 3:return 'Na orbicie kołowej prędkość satelity jest zawsze prostopadła do kierunku ku Ziemi. Grawitacja zmienia kierunek ruchu, ale nie szybkość. Schemat nie zachowuje skali.';
+ case 4:{const c=collision(v),kept=Math.abs(c.energyAfter-c.energyBefore)<.005;return `Po zderzeniu: v₁ = ${formatPl(c.v1,2)} m/s, v₂ = ${formatPl(c.v2,2)} m/s. Łączny pęd wciąż wynosi 1 kg·m/s, a energia ruchu ${kept?`pozostaje równa ${formatPl(c.energyBefore,2)} J`:`maleje z ${formatPl(c.energyBefore,2)} J do ${formatPl(c.energyAfter,2)} J`}.`;}
+ case 5:{const e=energyBalance(v);return `Energia użyteczna: ${e.useful.toFixed(0)} ze 100 jednostek. Przekazana otoczeniu: ${e.environment.toFixed(0)}. Razem nadal 100 — energia nie znika.`;}
+ case 6:{const c=circuit(v);return `Przy oporze 10 Ω: prąd ${formatPl(c.current,2)} A, moc ${formatPl(c.power,2)} W. ${v===0?'Przy zerowym napięciu prąd nie płynie.':'Ładunek krąży w obwodzie, a energia trafia do opornika.'}`;}
+ case 7:return 'Obracając magnes, obracasz całe jego pole: igła kompasu w tym samym miejscu wskazałaby inny kierunek. Wewnątrz magnesu linie biegną od S do N.';
+ case 8:return ['Uporządkowanie nie oznacza bezruchu: cząsteczki ciała stałego ciągle drgają.','W cieczy cząsteczki są wciąż blisko siebie, ale przesuwają się i zmieniają sąsiadów — dlatego ciecz płynie.','W gazie cząsteczki są daleko od siebie i poruszają się w różnych kierunkach, więc gaz wypełnia całe naczynie.'][Math.round(v)];
+ case 9:return ['DNA jest matrycą, na której powstaje RNA. To etap transkrypcji.','Powstałe mRNA niesie zapis, który odczyta rybosom.','Rybosom łączy aminokwasy w łańcuch białkowy. To etap translacji.'][Math.round(v)];
+ case 10:return v<.5?'„Zamek na wzgórzu ma…” — słowa „na wzgórzu” wskazują budowlę, więc najbardziej prawdopodobne są „wieże”. Liczby ustalono ręcznie.':'„Zamek w drzwiach ma…” — to samo słowo „zamek”, ale kontekst wskazuje mechanizm. Liczby nie pochodzą z prawdziwego modelu językowego.';
  }
 }
 export function drawExperiment(canvas,id,v,t=0){
@@ -39,7 +39,7 @@ export function drawExperiment(canvas,id,v,t=0){
  case 7:{ctx.save();ctx.translate(500,225);ctx.rotate(v*Math.PI/180);for(const h of [60,100,150]){ctx.beginPath();ctx.ellipse(0,0,210,h,0,0,Math.PI*2);ctx.strokeStyle=cyan;ctx.lineWidth=2;ctx.stroke();arrow([-12,-h],[12,-h],cyan);arrow([-12,h],[12,h],cyan);}ctx.fillStyle=gold;ctx.fillRect(-100,-25,100,50);ctx.fillStyle=muted;ctx.fillRect(0,-25,100,50);label('N',-50,8,25,'#101e25');label('S',50,8,25);arrow([80,0],[-80,0],white);ctx.restore();break;}
  case 8:{const phase=Math.round(v);for(let j=0;j<36;j++){let x,y;if(phase===0){x=330+(j%6)*60+Math.sin(t*6+j)*3;y= ninety() +Math.floor(j/6)*50+Math.cos(t*6+j)*3;}else if(phase===1){x=280+((j*77.3+Math.sin(t*.7+j)*30)%420+420)%420;y=230+((j*34.6+Math.cos(t*.6+j)*25)%110+110)%110;}else{x=80+((j*89.3+t*(30+(j%5)*10)*(j%2?1:-1))%840+840)%840;y=60+((j*53.6+t*(20+(j%7)*4)*(j%3?1:-1))%300+300)%300;}circle(x,y,9,cyan);}label(states[phase].toUpperCase(),500,420,23);break;}
  case 9:{const step=Math.round(v);for(let j=0;j<28;j++){const y1=210+Math.sin(j*.4)*50,y2=210-Math.sin(j*.4)*50;circle(100+j*7,y1,3,gold);circle(100+j*7,y2,3,gold);if(j%2===0)line([[100+j*7,y1],[100+j*7,y2]],muted,2);}arrow([310,210],[390,210],step>=1?gold:muted);line(Array.from({length:35},(_,j)=>[410+j*5,210+Math.sin(j*.4)*10]),step>=1?cyan:muted,4);arrow([610,210],[680,210],step===2?gold:muted);circle(750,190,45,step===2?gold:muted);circle(750,245,28,step===2?gold:muted);if(step===2){for(let j=0;j<13;j++)circle(775+j*6,170-Math.sin(j*.2)*75,5,white);}label('DNA',190,330,26);label('RNA',500,330,26);label('BIAŁKO',800,330,26);label('transkrypcja',350,120,18);label('translacja',650,120,18);break;}
- case 10:{const p=illustrativeDistribution(v);label(v<.5?'Zamek na wzgórzu ma…':'Zamek w drzwiach ma…',500,76,29);['wieże','mechanizm','historię'].forEach((s,j)=>{label(s,200,172+j*78,24);ctx.fillStyle='#29404b';ctx.fillRect(330,148+j*78,420,32);ctx.fillStyle=j===p.indexOf(Math.max(...p))?gold:muted;ctx.fillRect(330,148+j*78,420*p[j],32);label(`${Math.round(p[j]*100)}%`,825,173+j*78,24);});label('UMOWNY ROZKŁAD · SUMA 100% · TO NIE JEST WYNIK LLM',500,420,15,muted);break;}
+ case 10:{const p=illustrativeDistribution(v);label(v<.5?'Zamek na wzgórzu ma…':'Zamek w drzwiach ma…',500,76,29);['wieże','mechanizm','historię'].forEach((s,j)=>{label(s,200,172+j*78,24);ctx.fillStyle='#29404b';ctx.fillRect(330,148+j*78,420,32);ctx.fillStyle=j===p.indexOf(Math.max(...p))?gold:muted;ctx.fillRect(330,148+j*78,420*p[j],32);label(`${Math.round(p[j]*100)}%`,825,173+j*78,24);});label('UMOWNY ROZKŁAD · SUMA 100% · NIE POCHODZI Z MODELU JĘZYKOWEGO',500,420,15,muted);break;}
  }
 }
 function sixty(){return 60;}function ninety(){return 90;}

@@ -10,18 +10,18 @@
       25,
       -4
     ],
-    "idea": "Białe światło może zawierać wiele barw naraz.",
-    "explanation": "W szkle różne długości fali załamują się pod różnymi kątami. Pryzmat rozdziela je w widmo. Barwy nie powstają w szkle — były już obecne w padającym świetle.",
-    "fact": "Światło widzialne to tylko niewielki fragment widma elektromagnetycznego.",
-    "detail": "W zwykłym szklanym pryzmacie fiolet odchyla się silniej niż czerwień. Świetlne wstęgi instalacji są diagramem: w czystym powietrzu nie oglądamy wiązki z boku bez rozpraszających ją drobin.",
+    "idea": "Białe światło jest mieszaniną wielu barw.",
+    "explanation": "Każdej barwie odpowiada inna długość fali. Szkło załamuje je nieco inaczej — fiolet mocniej, czerwień słabiej — więc pryzmat rozkłada białe światło w widmo. Barwy nie powstają w szkle: były już obecne w padającym świetle.",
+    "fact": "Oko widzi tylko niewielki fragment widma elektromagnetycznego: fale o długości od około 380 nm (fiolet) do około 700 nm (czerwień).",
+    "detail": "Współczynnik załamania szkła zależy od długości fali i jest największy dla fioletu — to zjawisko nazywamy dyspersją. Świetlne wstęgi instalacji są rysunkiem: w czystym powietrzu wiązki światła nie widać z boku, dopóki nie rozproszą jej drobiny kurzu lub mgły.",
     "sources": [
       [
         "NASA · Visible Light",
         "https://science.nasa.gov/ems/09_visiblelight/"
       ],
       [
-        "NASA · Lighting & Optics",
-        "https://ntrs.nasa.gov/api/citations/19710016467/downloads/19710016467.pdf"
+        "OpenStax · Dispersion",
+        "https://openstax.org/books/university-physics-volume-3/pages/1-5-dispersion"
       ]
     ],
     "video": "01-swiatlo",
@@ -48,13 +48,17 @@
       -24
     ],
     "idea": "Zegar mierzy czas, licząc powtarzalne zjawiska.",
-    "explanation": "Cień, wahadło i atom dostarczają różnych sposobów wyznaczania rytmu. Dzisiejsza definicja sekundy odwołuje się do określonego przejścia w atomie cezu-133. Nie do obrotu Ziemi, który nie jest idealnie regularny.",
-    "fact": "Sekundzie odpowiada dokładnie 9 192 631 770 okresów promieniowania określonego przejścia atomu cezu-133.",
-    "detail": "Chodzi o niezakłócone przejście nadsubtelne stanu podstawowego. Atomy nie są miniaturowymi wahadłami. W interakcji obok wydłużenie wahadła zwiększa jego okres; model zakłada małe wychylenie i pomija opór.",
+    "explanation": "Rytm wyznaczały kolejno wędrówka cienia, kołysanie wahadła, a dziś promieniowanie atomów. Współczesna definicja sekundy odwołuje się do atomu cezu-133, a nie do obrotu Ziemi, który nie jest idealnie regularny.",
+    "fact": "Jedna sekunda to dokładnie 9 192 631 770 drgań promieniowania, które atom cezu-133 pochłania lub wysyła przy określonym przejściu.",
+    "detail": "Chodzi o przejście między dwoma poziomami nadsubtelnymi stanu podstawowego niezakłóconego atomu cezu. Atomy nie są miniaturowymi wahadłami. W doświadczeniu dłuższe wahadło ma dłuższy okres, czyli czas jednego pełnego wahnięcia tam i z powrotem; model zakłada małe wychylenie (poniżej ok. 15°) i pomija opór powietrza.",
     "sources": [
       [
         "NIST · Second: Introduction",
         "https://www.nist.gov/si-redefinition/second-introduction"
+      ],
+      [
+        "NIST · Leap Seconds",
+        "https://www.nist.gov/pml/time-and-frequency-division/time-realization/leap-seconds"
       ],
       [
         "OpenStax · Pendulums",
@@ -85,9 +89,9 @@
       -44
     ],
     "idea": "Orbita jest nieustannym swobodnym spadkiem.",
-    "explanation": "Satelita spada ku Ziemi, ale jego ruch w bok sprawia, że wciąż ją omija. Ogólna teoria względności opisuje grawitację przez geometrię czasoprzestrzeni. Zakrzywiona siatka pomaga wyobrazić sobie tę ideę, lecz nie jest dosłownym obrazem przestrzeni.",
-    "fact": "W próżni dwa małe ciała puszczone w tym samym miejscu spadają jednakowo, niezależnie od ich masy.",
-    "detail": "Rysunek gumowej membrany pomija wymiar czasu i używa zewnętrznej grawitacji, by wyjaśnić grawitację — ma więc granice. Orrerium pokazuje umowną orbitę, bez zachowania skali odległości i rozmiarów.",
+    "explanation": "Satelita cały czas spada ku Ziemi, ale porusza się w bok tak szybko, że wciąż ją mija. Einstein opisał grawitację jeszcze inaczej: jako zakrzywienie czasoprzestrzeni przez masę. Zakrzywiona siatka pomaga to sobie wyobrazić, ale nie jest dosłownym obrazem przestrzeni.",
+    "fact": "W próżni dwa małe ciała puszczone w tym samym miejscu spadają jednakowo, niezależnie od masy.",
+    "detail": "Model gumowej membrany pomija czas i sam korzysta z grawitacji — kulka stacza się w zagłębienie, bo ciągnie ją Ziemia — więc tłumaczy grawitację grawitacją. Mechaniczny model orbit w komnacie pokazuje umowną orbitę, bez zachowania skali odległości i rozmiarów.",
     "sources": [
       [
         "Max Planck / Einstein Online · Curvature",
@@ -104,7 +108,7 @@
     ],
     "video": "03-grawitacja",
     "videoStatus": "illustration",
-    "videoNote": "Siatka jest analogią, a rozmiary Ziemi i Księżyca nie zachowują skali.",
+    "videoNote": "Siatka jest analogią; rozmiary i odległości Ziemi i Księżyca nie zachowują skali.",
     "interaction": "Obejrzyj orbitę",
     "control": "Położenie na orbicie",
     "unit": "°",
@@ -123,18 +127,22 @@
       -25,
       -24
     ],
-    "idea": "W zderzeniu ruch może przejść z jednego ciała na drugie.",
-    "explanation": "Pęd zależy od masy i prędkości, a także od kierunku ruchu. Gdy wypadkowa siła zewnętrzna jest zerowa, całkowity pęd układu pozostaje stały. W rzeczywistych zderzeniach część energii ruchu zamienia się w ciepło, dźwięk i odkształcenia.",
-    "fact": "W idealnym sprężystym zderzeniu dwóch równych mas poruszających się po jednej prostej ciała zamieniają się prędkościami.",
-    "detail": "Model interaktywny dotyczy dwóch równych mas, z których druga początkowo spoczywa. Współczynnik sprężystości e zmienia podział prędkości, nie sumę pędu. Kołyska jest artefaktem ilustrującym temat, nie pomiarem idealnego zderzenia.",
+    "idea": "W zderzeniu pęd może przejść z jednego ciała na drugie.",
+    "explanation": "Pęd to masa pomnożona przez prędkość, dlatego ma także kierunek. Jeśli z zewnątrz nie działa wypadkowa siła, łączny pęd zderzających się ciał się nie zmienia. Energia ruchu nie musi się zachować: w prawdziwych zderzeniach jej część zamienia się w ciepło, dźwięk i odkształcenia.",
+    "fact": "Gdy kula uderza idealnie sprężyście w taką samą, nieruchomą kulę, zatrzymuje się, a druga rusza z jej prędkością.",
+    "detail": "Doświadczenie dotyczy dwóch kul o masie 1 kg; druga początkowo stoi. Suwak ustawia sprężystość zderzenia (współczynnik restytucji e): 1 oznacza zderzenie idealnie sprężyste, 0 — kule po zderzeniu poruszają się razem. Zmienia się podział prędkości i utrata energii, ale nie łączny pęd. Kołyska jest artefaktem ilustrującym temat, a nie pomiarem idealnego zderzenia.",
     "sources": [
       [
         "NASA Glenn · Conservation of Momentum",
         "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/conservation-of-momentum-2/"
       ],
       [
-        "OpenStax · Collisions in One Dimension",
+        "OpenStax · Types of Collisions",
         "https://openstax.org/books/university-physics-volume-1/pages/9-4-types-of-collisions"
+      ],
+      [
+        "OpenStax · Elastic Collisions in One Dimension",
+        "https://openstax.org/books/college-physics-2e/pages/8-4-elastic-collisions-in-one-dimension"
       ]
     ],
     "video": "04-ruch",
@@ -159,17 +167,17 @@
       -4
     ],
     "idea": "Energia zmienia postać, ale bilans musi się zgadzać.",
-    "explanation": "Wahadło przyspiesza, opadając: energia potencjalna grawitacji zmienia się w kinetyczną. Wznosząc się, zwalnia i odwraca tę przemianę. Opór powietrza i tarcie przekazują część energii do otoczenia, zwykle jako ciepło.",
-    "fact": "Nawet kiedy urządzenie się zatrzymuje, jego energia nie przepada: trzeba szukać jej także w otoczeniu.",
-    "detail": "Interakcja to umowny bilans 100 jednostek energii wejściowej, a nie pomiar konkretnej elektrowni. Przy sprawności η energia użyteczna wynosi 100η, a pozostała część trafia do otoczenia. Zasada dotyczy określonego układu i jego wymiany z otoczeniem.",
+    "explanation": "Opadające wahadło przyspiesza: energia potencjalna grawitacji zamienia się w energię ruchu. Wznosząc się, zwalnia i przemiana biegnie w drugą stronę. Opór powietrza i tarcie oddają przy tym część energii otoczeniu, głównie jako ciepło — podobnie dzieje się w silnikach i innych maszynach.",
+    "fact": "Ludzkie ciało przez większość czasu ma sprawność poniżej 5%: większość energii z pożywienia zamienia się w ciepło.",
+    "detail": "Doświadczenie to umowny bilans 100 jednostek energii dostarczonej do urządzenia, a nie pomiar konkretnej maszyny. Przy sprawności 65% użyteczne jest 65 jednostek, a pozostałe 35 trafia do otoczenia. Bilans zawsze się zgadza, jeśli liczymy energię całego układu razem z tym, co oddał otoczeniu.",
     "sources": [
       [
         "EIA · Laws of energy",
         "https://www.eia.gov/energyexplained/what-is-energy/laws-of-energy.php"
       ],
       [
-        "OpenStax · Pendulums",
-        "https://openstax.org/books/university-physics-volume-1/pages/15-4-pendulums"
+        "OpenStax · Conservation of Energy",
+        "https://openstax.org/books/university-physics-volume-1/pages/8-3-conservation-of-energy"
       ]
     ],
     "video": "05-energia",
@@ -194,9 +202,9 @@
       16
     ],
     "idea": "Żarówka pobiera energię, a nie zużywa ładunku.",
-    "explanation": "Prąd to uporządkowany przepływ ładunku. Źródło napięcia umożliwia przekazywanie energii w zamkniętym obwodzie. W ustalonym prostym obwodzie szeregowym prąd przed żarówką i za nią jest taki sam.",
-    "fact": "Elektrony nie znikają w świecącej żarówce.",
-    "detail": "Miedziany układ to schemat przestrzenny. Interakcja przedstawia idealny opornik o stałym oporze 10 Ω: I = U/R, P = UI. Prawdziwe włókno żarówki nagrzewa się, a jego opór zmienia się z temperaturą.",
+    "explanation": "Prąd to uporządkowany przepływ ładunku. Źródło napięcia wprawia ładunki w ruch w zamkniętym obwodzie, a one przenoszą energię do żarówki, gdzie zmienia się ona w światło i ciepło. W prostym obwodzie szeregowym przed żarówką i za nią płynie taki sam prąd.",
+    "fact": "Elektrony w przewodzie posuwają się naprzód bardzo powoli — typowo około metra na godzinę. Żarówka świeci od razu, bo ładunki w całym obwodzie ruszają jednocześnie.",
+    "detail": "Miedziany układ to schemat przestrzenny. Doświadczenie przedstawia idealny opornik o stałym oporze 10 Ω: prąd I = U/R, moc P = U·I. Prawdziwe włókno żarówki nagrzewa się, a jego opór zmienia się wraz z temperaturą.",
     "sources": [
       [
         "The Physics Classroom · Electric Current",
@@ -230,10 +238,10 @@
       -25,
       36
     ],
-    "idea": "Pole magnetyczne opisuje oddziaływanie w każdym punkcie przestrzeni.",
-    "explanation": "Igła kompasu ustawia się wzdłuż lokalnego pola. Opiłki pomagają zobaczyć jego układ, ale linie pola są narzędziem opisu, nie materialnymi nićmi. Wokół magnesu sztabkowego linie wracają przez jego wnętrze.",
-    "fact": "Rozcięcie zwykłego magnesu daje mniejsze magnesy z dwoma biegunami, a nie osobny biegun północny i południowy.",
-    "detail": "Na zewnątrz magnesu strzałki linii biegną od N do S; wewnątrz wracają. Model dipola jest uproszczeniem. Ziemskie pole nie jest idealnie symetryczne i zmienia się w czasie.",
+    "idea": "Pole magnetyczne mówi, w którą stronę ustawi się igła kompasu w każdym punkcie wokół magnesu.",
+    "explanation": "Na zewnątrz magnesu sztabkowego linie pola biegną od bieguna N do S, a wewnątrz magnesu wracają, tworząc zamknięte pętle. Opiłki żelaza pomagają zobaczyć ten układ, ale same linie są sposobem opisu, a nie materialnymi nićmi.",
+    "fact": "Po przecięciu magnesu każdy kawałek znów ma dwa bieguny — samego bieguna północnego nie da się wyciąć.",
+    "detail": "Ziemia też zachowuje się jak wielki magnes. Północny koniec igły kompasu wskazuje geograficzną północ, bo w jej pobliżu leży magnetyczny biegun południowy. Model dipola jest uproszczeniem: pole Ziemi nie jest idealnie symetryczne, a po długim czasie jego kierunek się odwraca.",
     "sources": [
       [
         "OpenStax · Magnetic Fields and Lines",
@@ -266,9 +274,9 @@
       49
     ],
     "idea": "Zmiana stanu skupienia nie musi zmieniać rodzaju cząsteczek.",
-    "explanation": "W ciele stałym cząsteczki drgają wokół uporządkowanych lub utrwalonych położeń. W cieczy mogą się przemieszczać względem sąsiadów, a w gazie są zwykle znacznie bardziej oddalone. Ogrzewanie może zmieniać ich ruch i wzajemne ułożenie.",
-    "fact": "Podczas topnienia czystej substancji w stałym ciśnieniu energia może napływać bez wzrostu temperatury.",
-    "detail": "Gabloty są modelem cząsteczkowym, bez skali. Kulki oznaczają całe cząsteczki, nie krople. Ich rozmiar się nie zmienia. Stan skupienia zależy także od ciśnienia; suwak porównuje trzy schematy, a nie symuluje przejścia fazowego.",
+    "explanation": "W ciele stałym cząsteczki są blisko siebie i drgają wokół stałych położeń. W cieczy nadal są blisko, ale mogą się przesuwać i zmieniać sąsiadów. W gazie są zwykle daleko od siebie i poruszają się niemal niezależnie. Ogrzewanie może zmienić ich ruch i ułożenie, a więc także stan skupienia.",
+    "fact": "Mieszanina lodu i wody pod ciśnieniem atmosferycznym ma 0 °C, dopóki lód się nie roztopi — choć przez cały czas pobiera ciepło.",
+    "detail": "Gabloty są modelem bez skali. Każda kulka oznacza całą cząsteczkę, a nie kroplę, i ma zawsze ten sam rozmiar. Stan skupienia zależy też od ciśnienia; suwak porównuje trzy schematy, a nie symuluje przejścia fazowego.",
     "sources": [
       [
         "OpenStax · Phase Changes",
@@ -300,10 +308,10 @@
       25,
       36
     ],
-    "idea": "Komórka korzysta z informacji DNA za pośrednictwem RNA.",
-    "explanation": "W transkrypcji na matrycy DNA powstaje RNA. Podczas translacji rybosom odczytuje mRNA i łączy aminokwasy w łańcuch białkowy. To dwa różne etapy, wymagające wielu cząsteczek i energii.",
+    "idea": "Komórka odczytuje informację z DNA za pośrednictwem RNA.",
+    "explanation": "Najpierw, w transkrypcji, na matrycy DNA powstaje cząsteczka RNA. Potem, w translacji, rybosom odczytuje informacyjne RNA (mRNA) i łączy aminokwasy w łańcuch, który zwija się w białko. Oba etapy wymagają wielu innych cząsteczek i energii.",
     "fact": "Rybosom zawiera zarówno białka, jak i RNA — RNA jest również częścią maszynerii, nie tylko wiadomością.",
-    "detail": "Nie każdy gen koduje białko. Niektóre RNA pełnią własne funkcje. Instalacja pokazuje uproszczoną drogę ekspresji genu kodującego białko; rozmiary DNA, RNA i rybosomu nie zachowują skali.",
+    "detail": "Nie każdy gen koduje białko: niektóre RNA same pełnią funkcje, na przykład budują rybosom. Instalacja pokazuje uproszczoną drogę dla genu kodującego białko; rozmiary DNA, RNA i rybosomu nie zachowują skali.",
     "sources": [
       [
         "NHGRI / NIH · RNA Fact Sheet",
@@ -339,10 +347,10 @@
       25,
       16
     ],
-    "idea": "Autoregresyjny model językowy generuje odpowiedź token po tokenie.",
-    "explanation": "Tokenizer dzieli tekst na elementy i przypisuje im identyfikatory. Embeddingi zamieniają je w wektory liczb, a attention łączy informacje z dostępnego kontekstu. Model wyznacza rozkład możliwych następnych tokenów; reguła dekodowania wybiera kolejny.",
-    "fact": "Płynna i przekonująca odpowiedź może zawierać zmyślony fakt.",
-    "detail": "Attention to obliczenie ważonej kombinacji reprezentacji, nie ludzka uwaga. Wybrany token dołącza do kontekstu przed następnym krokiem. Podział na tokeny zależy od tokenizera. Pokaz obok ma ręcznie ustalone prawdopodobieństwa i nie uruchamia LLM; ilustruje wpływ kontekstu, nie rzeczywisty pomiar modelu.",
+    "idea": "Model językowy pisze odpowiedź kawałek po kawałku — token po tokenie.",
+    "explanation": "Tekst zostaje podzielony na tokeny, czyli słowa lub ich fragmenty, a każdy token zamieniony na liczby. Mechanizm uwagi (attention) wiąże je z resztą dostępnego tekstu. Model oblicza, jak prawdopodobne są różne następne tokeny; jeden z nich zostaje wybrany i dopisany, a cykl się powtarza.",
+    "fact": "Płynna, przekonująca odpowiedź może zawierać zmyślony fakt: model dobiera tekst prawdopodobny, a nie sprawdzony.",
+    "detail": "Attention to rachunek, który nadaje wagi fragmentom tekstu — nie ludzka uwaga. Podział na tokeny zależy od użytego tokenizera. Liczby w doświadczeniu ustalono ręcznie; pokaz nie korzysta z prawdziwego modelu językowego i ilustruje tylko wpływ kontekstu.",
     "sources": [
       [
         "Vaswani et al. · Attention Is All You Need",
