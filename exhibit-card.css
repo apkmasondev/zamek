@@ -1,70 +1,187 @@
-/* A museum catalogue plate: limestone, engraved brass, quiet typography. */
-/* The opaque card needs no dark backdrop; hall, courtyard and observatory text keep the darker vignette from style.css. */
-.interior.station .vignette {
-  background: linear-gradient(180deg,#061016c9,transparent 26%,transparent 64%,#0610168c);
+/* Folio of the traveller: every reading surface is a leaf of old paper written in ink.
+   A .folio element carries the shadow; .sheet-rim is the lighter torn fibre edge and .sheet the page itself.
+   paper.js cuts both into ragged outlines that follow the size of each sheet. */
+.folio { position: absolute; filter: drop-shadow(0 16px 24px #0a0603a6) drop-shadow(0 2px 3px #0a060366) }
+.sheet-rim { position: absolute; inset: 0; background: #f6eedb; pointer-events: none }
+.sheet { position: relative; color: var(--ink); background-color: #e5d6b5;
+  background-image:
+    radial-gradient(ellipse at 45% 35%, #fff8e633, transparent 60%),
+    radial-gradient(circle at 14% 86%, #8a5a2226, transparent 20%),
+    radial-gradient(circle at 88% 12%, #8a5a221f, transparent 16%),
+    radial-gradient(circle at 73% 78%, #8a5a2214, transparent 9%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32 0 0 0 0 .22 0 0 0 0 .1 0 0 0 .2 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012 .09' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .32 0 0 0 0 .16 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E"),
+    linear-gradient(172deg, #ecdfc2, #d9c59c);
+  box-shadow: inset 0 0 70px #7a4f1f47, inset 0 0 14px #7a4f1f2e }
+.sheet ::selection { background: #8b2f1d33 }
+
+/* Shared typography of the folio */
+.folio-kicker { margin: 0 0 6px; font-size: 15px; font-variant-caps: all-small-caps; letter-spacing: .07em; color: var(--rubric) }
+.folio-label { display: block; font-size: 14px; font-variant-caps: all-small-caps; letter-spacing: .07em; color: var(--rubric) }
+.sheet h1, .sheet h2 { font-weight: 400; color: var(--ink); letter-spacing: -.01em }
+.sheet p { color: var(--ink) }
+.sheet a { color: var(--rubric); text-decoration-thickness: 1px; text-underline-offset: 3px }
+.folio-button { display: inline-flex; align-items: baseline; gap: 10px; padding: 10px 18px 11px; font-size: 17px; color: #f4ead6; background: #3a2a1b;
+  clip-path: polygon(0 6%, 3% 0, 97% 3%, 100% 12%, 99% 92%, 96% 100%, 4% 97%, 1% 88%); transition: background .2s }
+.folio-button:hover { background: #5a2a1a }
+.folio-button:focus-visible { outline: none; background: #5a2a1a; box-shadow: inset 0 0 0 2px #f4ead6 }
+.text-button { padding: 6px 0; font-size: 15px; color: var(--ink-soft); border-bottom: 1px solid #5e4c3866 }
+.text-button:hover { color: var(--rubric); border-color: var(--rubric) }
+.sheet button:focus-visible, .sheet a:focus-visible, .sheet input:focus-visible { outline: 2px solid var(--rubric); outline-offset: 3px }
+.close { position: absolute; top: 14px; right: 16px; width: 38px; height: 38px; font-size: 30px; line-height: 1; color: var(--ink-soft); z-index: 2 }
+.close:hover { color: var(--rubric) }
+.small { font-size: 13px; line-height: 1.6; color: var(--ink-soft) !important; font-style: italic }
+
+/* Title leaf on the first view: a frontispiece with a wax seal instead of a landing-page headline. */
+.intro { left: 6vw; top: 50%; transform: translateY(-46%); width: 400px; transition: opacity .6s }
+.intro .sheet { padding: 56px 40px 34px }
+.seal { position: absolute; z-index: 1; top: -22px; left: 38px; width: 66px; height: 66px; display: grid; place-items: center;
+  background: radial-gradient(circle at 38% 34%, #b8513a, #7d2616 58%, #5b180c);
+  clip-path: polygon(50% 0, 62% 4%, 75% 2%, 84% 12%, 96% 20%, 97% 34%, 100% 47%, 96% 60%, 99% 73%, 88% 83%, 80% 95%, 66% 96%, 52% 100%, 39% 96%, 25% 99%, 16% 88%, 4% 79%, 5% 64%, 0 50%, 4% 37%, 2% 23%, 13% 14%, 22% 3%, 37% 4%);
+  box-shadow: inset 0 0 0 5px #9a3521, inset 0 -6px 12px #3d0f0799 }
+.seal img { width: 30px; height: 34px; filter: sepia(1) saturate(3) hue-rotate(-30deg) brightness(.55); opacity: .75 }
+.intro h1 { margin: 2px 0 14px; font-size: 42px; line-height: 1.02 }
+.intro-copy { margin: 0 0 24px; font-size: 18px; line-height: 1.5; font-style: italic; color: #3b2d1f !important }
+.intro-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px }
+.folio-hint { margin: 0; font-size: 14px; line-height: 1.4; color: var(--ink-soft) !important }
+.intro-rule { height: 1px; margin: 26px 0 12px; background: linear-gradient(90deg, #5e4c3880, #5e4c3810) }
+.intro-foot { margin: 0; font-size: 14px; font-variant-caps: all-small-caps; letter-spacing: .06em; color: var(--ink-soft) !important }
+
+/* Place note: a torn page from the travel journal at each non-room stop. */
+.landmark { left: 4vw; bottom: 12vh; width: 380px; pointer-events: none }
+.landmark .sheet { padding: 24px 28px 22px }
+.landmark h1 { margin: 0 0 10px; font-size: 30px; line-height: 1.1 }
+.landmark p#place-copy { margin: 0; font-size: 16px; line-height: 1.55 }
+
+/* Room card */
+.interior.station .vignette { background: linear-gradient(180deg, #070c0f99, transparent 26%, transparent 70%, #070c0f73) }
+.exhibit { left: 3vw; bottom: 9vh; width: 380px; z-index: 4 }
+.exhibit .sheet { display: flex; flex-direction: column; max-height: calc(100dvh - 150px); padding: 26px 26px 18px }
+.exhibit .sheet > * { flex-shrink: 0 }
+.exhibit-heading { margin-bottom: 12px }
+.exhibit-heading .folio-kicker { margin-bottom: 2px }
+.exhibit-heading h1 { margin: 0; font-size: 34px; line-height: 1.08 }
+.room-name { margin: 4px 0 0; font-size: 15px; font-style: italic; color: var(--ink-soft) !important }
+.station-idea { margin: 4px 0 14px; padding-left: 14px; border-left: 2px solid var(--rubric); font-size: 19px; line-height: 1.45; font-style: italic }
+.exhibit #reading { flex-shrink: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding-right: 8px; margin-right: -8px; scrollbar-width: thin; scrollbar-color: #7d6446 transparent }
+#station-explanation { margin: 0; font-size: 16px; line-height: 1.6 }
+.fact, .film-note { margin: 14px 0 0; padding-top: 10px; border-top: 1px solid #5e4c3840 }
+.fact p { margin: 3px 0 0; font-size: 16px; line-height: 1.55 }
+.film-note .video-note { margin: 3px 0 2px; font-size: 14px; line-height: 1.5; font-style: italic; color: var(--ink-soft) !important }
+.exhibit-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #5e4c3859 }
+.exhibit-actions .folio-button { flex: 1 0 100%; justify-content: flex-start; flex-direction: column; align-items: flex-start; gap: 0; padding: 9px 16px 10px }
+.folio-button-kicker { font-size: 13px; font-variant-caps: all-small-caps; letter-spacing: .08em; color: #e3c48c }
+#experiment-name { font-size: 18px }
+
+/* Dialogs: a sheet laid over the dimmed scene */
+.folio-dialog { position: fixed; padding: 0; border: 0; background: transparent; color: var(--ink); overflow: visible; max-width: 94vw; max-height: none }
+.folio-dialog::backdrop { background: #05090bb8 }
+.folio-dialog .sheet { max-height: 88vh; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #7d6446 transparent }
+.folio-dialog h2 { margin: 0 0 14px; font-size: 34px; line-height: 1.1 }
+.folio-dialog h3 { margin: 26px 0 8px; font-weight: 400; font-size: 21px; color: var(--ink) }
+.folio-dialog p { font-size: 16px; line-height: 1.6 }
+.detail-dialog { width: min(620px, 94vw) }
+.detail-dialog .sheet { padding: 44px 46px 30px }
+#source-list { margin: 0; padding-left: 22px }
+#source-list li { margin: 8px 0; font-size: 15px; line-height: 1.45 }
+#source-list li::marker { color: var(--rubric) }
+
+.howto { list-style: none; margin: 6px 0 4px; padding: 0 }
+.howto li { display: grid; grid-template-columns: 38px 1fr; gap: 12px; align-items: start; margin: 12px 0; font-size: 16px; line-height: 1.5 }
+.howto svg { width: 34px; height: 34px; fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round }
+.howto .lamp { fill: #e7a84a; stroke: var(--ink) }
+kbd { font: inherit; font-size: 14px; padding: 0 6px; border: 1px solid #5e4c38a6; border-bottom-width: 2px; border-radius: 3px; background: #f1e6cc }
+.setting { display: flex; gap: 12px; align-items: center; margin: 10px 0; font-size: 16px; cursor: pointer }
+.setting input { appearance: none; -webkit-appearance: none; flex: none; width: 18px; height: 18px; margin: 0; border: 1.5px solid var(--ink); background: #f1e6cc80; display: grid; place-items: center; cursor: pointer }
+.setting input:checked::after { content: "✓"; font-size: 15px; line-height: 1; color: var(--rubric) }
+
+/* Experiment: the live diagram is a dark plate mounted on the page */
+.experiment-dialog { width: min(860px, 94vw) }
+.experiment-dialog .sheet { padding: 40px 42px 28px }
+.experiment-dialog h2 { font-size: 30px; margin-bottom: 16px }
+.plate { position: relative; padding: 7px; background: #20160d; box-shadow: 0 2px 0 #fff4, 0 6px 16px #3b240f55 }
+.plate::before, .plate::after { content: ""; position: absolute; width: 14px; height: 14px; border: solid var(--brass); pointer-events: none }
+.plate::before { top: 3px; left: 3px; border-width: 2px 0 0 2px }
+.plate::after { right: 3px; bottom: 3px; border-width: 0 2px 2px 0 }
+.plate canvas { display: block; width: 100%; height: auto }
+.experiment-dialog label { display: block; margin-top: 20px; font-size: 15px; font-variant-caps: all-small-caps; letter-spacing: .06em; color: var(--rubric) }
+.range-row { display: flex; gap: 22px; align-items: center; margin: 6px 0 4px }
+.range-row input { flex: 1; appearance: none; -webkit-appearance: none; height: 22px; background: transparent; cursor: ew-resize }
+.range-row input::-webkit-slider-runnable-track { height: 2px; background: var(--ink) }
+.range-row input::-moz-range-track { height: 2px; background: var(--ink) }
+.range-row input::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; margin-top: -8px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #f2d392, #9d7431); border: 1.5px solid var(--ink) }
+.range-row input::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #f2d392, #9d7431); border: 1.5px solid var(--ink) }
+.range-row output { min-width: 80px; text-align: right; font-size: 21px; color: var(--rubric) }
+.experiment-result { min-height: 52px; margin: 8px 0 4px; font-size: 18px !important; line-height: 1.55 }
+
+/* Castle plan drawn in ink */
+.map-dialog { width: min(1100px, 94vw) }
+.map-dialog .sheet { display: grid; grid-template-columns: 300px 1fr; gap: 28px; padding: 40px 44px 36px; min-height: min(660px, 88vh) }
+.map-heading { align-self: center }
+.map-heading p { font-size: 16px }
+.map-legend { list-style: none; margin: 16px 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 15px }
+.map-legend i { display: inline-block; vertical-align: -3px; width: 16px; height: 16px; margin-right: 10px; border: 1.5px solid var(--ink) }
+.map-legend .lg-current { border-color: var(--rubric); box-shadow: inset 0 0 0 3px #e5d6b5, inset 0 0 0 9px var(--rubric) }
+.map-legend .lg-visited { position: relative }
+.map-legend .lg-visited::after { content: "✓"; position: absolute; inset: -3px 0 0 2px; font-size: 14px; color: var(--rubric); font-style: normal }
+.map-count { margin: 18px 0 10px !important; font-size: 19px !important; font-style: italic; color: var(--rubric) !important }
+.floorplan { position: relative; min-height: 560px; align-self: stretch }
+.floorplan svg { position: absolute; inset: 0; width: 100%; height: 100% }
+.map-room { position: absolute; width: 27%; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 1px; color: var(--ink);
+  border: 1.5px solid #2b2016d9; background: #fbf3df45; transition: background .2s }
+.map-room span { font-size: 24px; line-height: 1; color: var(--rubric) }
+.map-room b { font-weight: 400; font-size: 14px }
+.map-room:hover { background: #fbf3dfa6 }
+.map-room.visited::after { content: "✓"; position: absolute; top: 3px; right: 7px; font-size: 16px; color: var(--rubric) }
+.map-room.current { border: 2.5px solid var(--rubric); background: #fbf3df8c }
+.map-room.current::before { content: "tu jesteś"; position: absolute; bottom: -1px; left: 50%; transform: translate(-50%, 55%); padding: 0 6px; font-size: 13px; font-style: italic; color: var(--rubric); background: #e5d6b5 }
+.map-label { position: absolute; width: 26%; text-align: center; font-size: 13px; font-variant-caps: all-small-caps; letter-spacing: .05em; color: var(--ink-soft); pointer-events: none; line-height: 1.3 }
+.map-label small { display: block; font-size: 13px }
+
+@media (min-width: 1650px) {
+  .exhibit { width: 420px }
+  .exhibit-heading h1 { font-size: 38px }
+  .intro { width: 440px }
 }
-.exhibit {
-  left: 3.5vw; bottom: 11vh; width: 360px;
-  max-height: calc(100dvh - 165px); padding: 23px 25px 17px;
-  color: #34372f; background: linear-gradient(125deg,#ede7d8,#d7cfbd);
-  border: 1px solid #bcaa83;
-  box-shadow: inset 0 0 0 5px #e5decd,inset 0 0 0 6px #b2a17b70,0 12px 35px #07101238;
-  scrollbar-color: #8d7a52 #d8cfbc; scrollbar-gutter: stable;
-  overscroll-behavior: contain;
+@media (max-width: 900px) and (min-width: 601px) {
+  .exhibit { width: 330px; left: 20px }
+  .map-dialog .sheet { grid-template-columns: 220px 1fr; gap: 16px; padding: 34px 28px 28px }
+  .intro { width: 360px; left: 4vw }
 }
-.catalogue-line {display:flex;justify-content:space-between;gap:10px;font:8px/1.5 Arial,sans-serif;letter-spacing:1.6px;color:#786744;border-bottom:1px solid #a08c604d;padding-bottom:13px;margin-bottom:19px}
-.exhibit-heading {gap:15px;margin-bottom:19px;align-items:center}
-.station-number {display:grid;place-items:center;flex:0 0 44px;height:50px;padding:0;border:1px solid #9e8a61;font:25px/1 Georgia,serif;color:#77613a;border-radius:22px 22px 2px 2px}
-.exhibit-heading h1 {font:normal 30px/1.12 Georgia,serif;letter-spacing:-.5px;margin:5px 0 0;color:#30372e}
-.exhibit-heading .eyebrow {font:8px/1.55 Arial,sans-serif;letter-spacing:1.1px;color:#786744;max-width:240px}
-.station-idea {font:normal 18px/1.5 Georgia,serif;color:#363a30;margin:0 0 15px}
-#station-explanation {font:12px/1.8 Arial,sans-serif;color:#53574c}
-.fact {margin:17px 0;padding:14px 0 0;border:0;border-top:1px solid #a08c604d}
-.fact>span {font:8px/1.4 Arial,sans-serif;letter-spacing:1.7px;color:#786744}
-.fact>p {font:14px/1.65 Georgia,serif;color:#434638;margin:6px 0 0}
-.exhibit-actions {border-top:1px solid #a08c604d;padding-top:10px;gap:4px 15px}
-.exhibit-actions>button:first-child {flex:1 0 100%;border:0;padding:7px 0;text-align:left;font:15px/1.5 Georgia,serif;color:#67512b;letter-spacing:0}
-.exhibit-actions .text-button {font:10px/1.5 Arial,sans-serif;padding:7px 0;color:#655c48;border-bottom:1px solid #a08c6050}
-.exhibit button:hover {color:#241b0c;text-decoration:underline;text-underline-offset:4px}
-.exhibit button:focus-visible {outline-color:#755b28;outline-offset:3px}
-.video-note,.video-note.pending {font:10px/1.6 Arial,sans-serif;color:#666657;padding-top:4px;margin:9px 0 0;max-width:none}
-.reading-collapsed .exhibit {width:360px}
-.reading-collapsed .catalogue-line {margin-bottom:14px}
-@media(min-width:1650px) {
-  .exhibit,.reading-collapsed .exhibit {width:395px;padding:26px 29px 20px}
-  .exhibit-heading h1 {font-size:34px}
-  #station-explanation {font-size:13px}
-  .station-idea {font-size:19px}
-  .fact>p {font-size:15px}
+@media (max-width: 600px) {
+  .intro { left: 12px; right: 12px; top: auto; bottom: 64px; transform: none; width: auto }
+  .intro .sheet { padding: 40px 24px 20px }
+  .seal { width: 52px; height: 52px; top: -18px; left: 24px }
+  .seal img { width: 24px; height: 27px }
+  .intro h1 { font-size: 32px; margin-bottom: 8px }
+  .intro-copy { font-size: 16px; margin-bottom: 16px }
+  .intro-rule, .intro-foot { display: none }
+  .landmark { left: 12px; right: 12px; bottom: 58px; width: auto }
+  .landmark .sheet { padding: 18px 20px 16px }
+  .landmark h1 { font-size: 24px }
+  .landmark p#place-copy { font-size: 15px }
+  .exhibit { left: 10px; right: 10px; bottom: 50px; width: auto }
+  .exhibit .sheet { display: block; max-height: 44dvh; overflow-y: auto; overscroll-behavior: contain; padding: 20px 20px 14px }
+  .exhibit #reading { overflow: visible; margin-right: 0; padding-right: 0 }
+  .exhibit-heading h1 { font-size: 28px }
+  .station-idea { font-size: 17px }
+  #station-explanation, .fact p { font-size: 15px }
+  .exhibit-actions .text-button { min-height: 40px; display: flex; align-items: center }
+  .folio-dialog .sheet { max-height: 86vh }
+  .detail-dialog .sheet, .experiment-dialog .sheet { padding: 38px 22px 22px }
+  .folio-dialog h2 { font-size: 27px }
+  .map-dialog .sheet { display: block; padding: 34px 18px 20px }
+  .map-heading > p:not(.folio-kicker):not(.map-count), .map-legend { display: none }
+  .map-heading h2 { margin-bottom: 4px }
+  .map-count { margin: 4px 0 !important; font-size: 16px !important }
+  .map-heading .text-button { position: absolute; right: 60px; top: 40px; font-size: 14px }
+  .floorplan { min-height: 440px; margin-top: 10px }
+  .map-room span { font-size: 19px }
+  .map-room b { font-size: 11px }
+  .map-room.current::before { font-size: 11px }
+  .map-label, .map-label small { font-size: 10px }
+  .range-row output { min-width: 60px; font-size: 18px }
 }
-@media(max-width:900px) and (min-width:601px) {
-  .exhibit,.reading-collapsed .exhibit {width:310px;left:24px;padding:21px 21px 16px}
-}
-@media(max-width:600px) {
-  .exhibit,.reading-collapsed .exhibit {left:16px;right:16px;bottom:60px;width:auto;max-height:43dvh;padding:18px 20px 15px}
-  .catalogue-line {font-size:7px;margin-bottom:13px;padding-bottom:10px}
-  .exhibit-heading {gap:12px;margin-bottom:13px}
-  .exhibit-heading h1 {font-size:28px}
-  .exhibit-heading .eyebrow {font-size:7px}
-  .station-number {font-size:23px;flex-basis:40px;height:46px}
-  .station-idea {font-size:17px;margin-bottom:12px}
-  .exhibit-actions .text-button {min-height:38px;display:flex;align-items:center}
-}
-.accessible .exhibit {max-height:calc(100dvh - 160px)}
-/* Without the 3D loop nothing positions the markers, so list them as ordinary buttons. */
-.accessible #hotspots {position:absolute;right:5vw;bottom:100px;z-index:6;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
-.accessible .hotspot {position:static;transform:none;flex-direction:row}
-@media(max-width:600px) {.accessible #hotspots {bottom:auto;top:80px;right:16px}}
-/* Music toggle: a speaker with sound waves when playing, a crossed speaker when silent, plus a text label on wider screens. */
-#sound {display:flex;align-items:center;gap:8px;font-size:12px}
-#sound .sound-icon {width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-#sound .sound-icon .speaker {fill:currentColor;stroke:none}
-#sound[aria-pressed="true"] .sound-off, #sound[aria-pressed="false"] .sound-waves {display:none}
-@media(max-width:600px) {#sound .sound-label {display:none}#sound .sound-icon {width:21px;height:21px}}
-/* On phones the plan is narrow: keep place names inside their outlines. */
-@media(max-width:600px) {.map-label {font-size:6.5px;letter-spacing:.1px}.map-label small {font-size:5.5px;letter-spacing:1px}}
-@media(min-width:601px) {
-  .exhibit {display:flex;flex-direction:column;overflow:hidden;scrollbar-gutter:auto}
-  .exhibit>* {flex-shrink:0}
-  .exhibit #reading {flex-shrink:1;min-height:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#9b8861 transparent;padding-right:6px}
-}
+.accessible .exhibit { left: 5vw; bottom: 90px; width: min(620px, 90vw) }
+.accessible .exhibit .sheet { max-height: calc(100dvh - 170px) }
+.calm .hotspot .orb::after { animation: none }

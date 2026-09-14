@@ -12,7 +12,7 @@ Interaktywna podróż 3D po zamku-muzeum nad jeziorem. Dziesięć komnat opowiad
 
 ## Sterowanie
 
-- Wybieraj świetlne znaczniki z nazwami miejsc.
+- Na początku wybierz „Wyrusz w drogę” albo dowolny świecący znacznik z nazwą miejsca.
 - Przeciągnij widok, aby się rozejrzeć.
 - **M** otwiera plan zamku, **Escape** zamyka okna, **Tab** przechodzi między elementami strony.
 - W oknie „O wystawie” można włączyć spokojne przejścia bez ruchu kamery i wyłączyć wysoką jakość obrazu.
@@ -37,7 +37,7 @@ Repozytorium zawiera wyłącznie pliki potrzebne do działania strony:
 
 | Ścieżka | Zawartość |
 |---|---|
-| `index.html`, `app.js`, `science.js`, `music.js`, `style.css`, `exhibit-card.css` | aplikacja |
+| `index.html`, `app.js`, `science.js`, `music.js`, `gates.js`, `paper.js`, `style.css`, `exhibit-card.css` | aplikacja |
 | `stations.json` | treści komnat i źródła |
 | `models/` | model zamku (glTF z kompresją Draco) i tekstura wody |
 | `media/` | filmy komnat (H.264, bez dźwięku) |
@@ -49,7 +49,7 @@ Edytowalny projekt Blendera, skrypty produkcyjne i dokumentacja powstawania wyst
 ## Uwagi o treściach
 
 - Filmy są generatywnymi wizualizacjami, a nie nagraniami eksperymentów. Ograniczenia każdego filmu opisano przy odpowiedniej komnacie.
-- Modele interaktywne są uproszczeniami dydaktycznymi; ich założenia podaje sekcja „Głębiej i źródła”.
+- Modele interaktywne są uproszczeniami dydaktycznymi; ich założenia podaje okno „Szczegóły i źródła”.
 - Rozkłady prawdopodobieństwa w komnacie Informacja i AI ustalono ręcznie. Nie pochodzą z działającego modelu językowego.
 
 ## Biblioteki zewnętrzne

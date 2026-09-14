@@ -11,12 +11,14 @@ import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
 import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
 import {drawExperiment,explanation,formatPl} from './science.js';
 import {initMusic} from './music.js';
+import {createEntranceGates} from './gates.js';
+import {tearSheet} from './paper.js';
 const $=id=>document.getElementById(id);
 // Without the exhibit texts nothing can start: show the failure screen instead of an endless loader.
 const stations=await fetch('stations.json').then(r=>{if(!r.ok)throw Error('Brak treści wystawy');return r.json();}).catch(e=>{$('loading').hidden=true;$('failure').hidden=false;$('accessible-open').hidden=true;$('failure-message').textContent='Nie udało się wczytać treści wystawy. Sprawdź połączenie i spróbuj ponownie.';throw e;});
 const visited=new Set();
 let current='gate',traveling=false,activeStation=null,castle,renderer,composer,aoPass,scene,camera,ready=false,accessible=false;
-let lastTime=0,worldTime=0,frameTimes=[],lookYaw=0,lookPitch=0,lookBase=new THREE.Vector3(),move=null,lake;
+let lastTime=0,worldTime=0,frameTimes=[],lookYaw=0,lookPitch=0,lookBase=new THREE.Vector3(),move=null,lake,entranceGates;
 let reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,quality=true;
 const videos=new Map(),screens=new Map(),hotspots=[],failedVideos=new Set();
 const w=(x,y,z=2)=>new THREE.Vector3(x,z,-y);
@@ -32,6 +34,8 @@ const nodeDefs={
 stations.forEach(s=>{const[x,y]=s.position;nodeDefs[s.id]={p:w(x+5.6,y-6.8,2.4),target:w(x-1.7,y+.8,3.5),label:s.title,next:s.id===10?'finale':s.id+1};});
 function viewTarget(key){if(innerWidth<600&&typeof key==='number'){const[x,y]=stations[key-1].position;return w(x+.3,y+1.3,3.6);}return nodeDefs[key].target;}
 const sceneStatus={loaded:false,errors:[],metrics:{}};
+// Every reading surface is a torn leaf of paper; the outline follows each sheet's size.
+[['intro',10],['landmark',8],['exhibit',7]].forEach(([id,depth])=>tearSheet($(id),depth));document.querySelectorAll('.folio-dialog').forEach(d=>tearSheet(d,11));
 // Read-only diagnostics exposed visibly through a query parameter, not used for navigation.
 window.addEventListener('error',e=>sceneStatus.errors.push(e.message));
 window.addEventListener('unhandledrejection',e=>sceneStatus.errors.push(String(e.reason)));
@@ -41,11 +45,12 @@ document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('di
 document.querySelectorAll('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();}}));
 $('map-open').onclick=()=>dialogOpen('map-dialog');$('about-open').onclick=()=>dialogOpen('about-dialog');
 $('return-gate').onclick=()=>{ $('map-dialog').close();go('gate',true);};
-$('reduced-motion').checked=reduced;$('reduced-motion').onchange=e=>reduced=e.target.checked;
+$('reduced-motion').checked=reduced;document.body.classList.toggle('calm',reduced);$('reduced-motion').onchange=e=>{reduced=e.target.checked;document.body.classList.toggle('calm',reduced);};
+$('start-journey').onclick=()=>go('arrival');
 $('high-quality').onchange=e=>{quality=e.target.checked;if(renderer){renderer.setPixelRatio(quality?Math.min(devicePixelRatio,1.5):1);composer?.setPixelRatio(renderer.getPixelRatio());}};
 $('reading-toggle').onclick=()=>{const collapsed=document.body.classList.toggle('reading-collapsed');$('reading-toggle').textContent=collapsed?'Rozwiń opis':'Zwiń opis';$('reading-toggle').setAttribute('aria-expanded',String(!collapsed));};
-$('details-open').onclick=()=>{if(!activeStation)return;setText('detail-title',activeStation.title);setText('detail-copy',activeStation.detail);$('source-list').replaceChildren(...activeStation.sources.map(([name,url])=>{const li=document.createElement('li'),a=document.createElement('a');a.textContent=name+' ↗';a.href=url;a.target='_blank';a.rel='noopener noreferrer';li.append(a);return li;}));dialogOpen('detail-dialog');};
-$('experiment-open').onclick=()=>{if(!activeStation)return;const s=activeStation;setText('experiment-kicker',`KOMNATA ${String(s.id).padStart(2,'0')} · ${s.title.toUpperCase()}`);setText('experiment-title',s.interaction);setText('parameter-label',s.control);setText('experiment-limit',s.detail);const range=$('parameter');range.min=s.min;range.max=s.max;range.step=[8,9,10].includes(s.id)?1:s.id===4?.05:s.id===2?.1:1;range.value=s.value;updateExperiment();dialogOpen('experiment-dialog');};
+$('details-open').onclick=()=>{if(!activeStation)return;setText('detail-kicker',`Komnata ${String(activeStation.id).padStart(2,'0')} · za kulisami zjawiska`);setText('detail-title',activeStation.title);setText('detail-copy',activeStation.detail);$('source-list').replaceChildren(...activeStation.sources.map(([name,url])=>{const li=document.createElement('li'),a=document.createElement('a');a.textContent=name+' ↗';a.href=url;a.target='_blank';a.rel='noopener noreferrer';li.append(a);return li;}));dialogOpen('detail-dialog');};
+$('experiment-open').onclick=()=>{if(!activeStation)return;const s=activeStation;setText('experiment-kicker',`Komnata ${String(s.id).padStart(2,'0')} · ${s.title} · doświadczenie`);setText('experiment-title',s.interaction);setText('parameter-label',s.control);setText('experiment-limit',s.detail);const range=$('parameter');range.min=s.min;range.max=s.max;range.step=[8,9,10].includes(s.id)?1:s.id===4?.05:s.id===2?.1:1;range.value=s.value;updateExperiment();dialogOpen('experiment-dialog');};
 $('parameter').oninput=updateExperiment;
 function parameterText(s,v){if([8,9,10].includes(s.id))return s.control.split(': ')[1].split(' · ')[Math.round(v)];const n=Number.isInteger(v)?String(v):formatPl(v,s.id===4?2:1);return s.unit==='°'?n+'°':s.unit?n+' '+s.unit:n;}
 function updateExperiment(){if(!activeStation)return;const v=Number($('parameter').value);setText('parameter-value',parameterText(activeStation,v));setText('experiment-result',explanation(activeStation.id,v));drawExperiment($('experiment-canvas'),activeStation.id,v,experimentTime());}
@@ -65,7 +70,7 @@ function renderMap(){const fp=$('floorplan');
  ];
  // The SVG stretches with the buttons, so round shapes get per-axis radii to stay circles on narrow phones.
  const sx=(fp.clientWidth||500)/500,sy=(fp.clientHeight||600)/600,k=Math.min(sx,sy),circle=(cx,cy,r,attrs)=>`<ellipse cx="${cx}" cy="${cy}" rx="${r*k/sx}" ry="${r*k/sy}" ${attrs}/>`;
- fp.innerHTML=`<svg viewBox="0 0 500 600" preserveAspectRatio="none" aria-hidden="true"><defs><marker id="map-direction" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M1 1L6 3.5L1 6" fill="none" stroke="#d0b67e" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></marker></defs><rect x="191" y="264" width="118" height="144" fill="#51674922" stroke="#9d875a55"/>${circle(250,378,17,'fill="none" stroke="#b39b6966" vector-effect="non-scaling-stroke"')}${circle(250,181,59,'fill="#758b9130" stroke="#aa955e" vector-effect="non-scaling-stroke"')}<path d="M250 ${181-52*k/sy}v${38*k/sy}M250 ${181+14*k/sy}v${38*k/sy}" stroke="#a9956288" vector-effect="non-scaling-stroke"/><g stroke="#b19a68" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 5">${route.map(([from,to,d])=>`<path data-route-from="${from}" data-route-to="${to}" d="${d}" marker-end="url(#map-direction)" vector-effect="non-scaling-stroke"/>`).join('')}</g><circle cx="250" cy="488" r="3" fill="#d0b67e"/></svg>`;
+ fp.innerHTML=`<svg viewBox="0 0 500 600" preserveAspectRatio="none" aria-hidden="true"><defs><marker id="map-direction" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M1 1L6.5 4L1 7" fill="none" stroke="#8b2f1d" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></marker><pattern id="map-hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V7" stroke="#5e4c38" stroke-width="1" opacity=".35"/></pattern></defs><rect x="191" y="264" width="118" height="144" fill="url(#map-hatch)" stroke="#2b2016" stroke-opacity=".75" vector-effect="non-scaling-stroke"/>${circle(250,378,17,'fill="#e5d6b5" stroke="#2b2016" stroke-opacity=".7" vector-effect="non-scaling-stroke"')}${circle(250,181,59,'fill="#fbf3df55" stroke="#2b2016" stroke-width="1.5" vector-effect="non-scaling-stroke"')}${circle(250,181,51,'fill="none" stroke="#2b2016" stroke-opacity=".45" stroke-dasharray="2 3" vector-effect="non-scaling-stroke"')}<path d="M250 ${181-52*k/sy}v${38*k/sy}M250 ${181+14*k/sy}v${38*k/sy}" stroke="#2b2016" stroke-opacity=".45" vector-effect="non-scaling-stroke"/><g stroke="#8b2f1d" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5">${route.map(([from,to,d])=>`<path data-route-from="${from}" data-route-to="${to}" d="${d}" marker-end="url(#map-direction)" vector-effect="non-scaling-stroke"/>`).join('')}</g><circle cx="250" cy="488" r="3.5" fill="#8b2f1d"/><g transform="translate(${52} ${58}) scale(${k/sx} ${k/sy})" fill="none" stroke="#2b2016" stroke-width="1.2" vector-effect="non-scaling-stroke"><circle r="22" stroke-opacity=".55"/><path d="M0-30L5-5 0 0-5-5z" fill="#8b2f1d" stroke="#8b2f1d"/><path d="M0 30L5 5 0 0-5 5z" fill="#e5d6b5"/><path d="M-30 0H30" stroke-opacity=".55"/><text y="-35" text-anchor="middle" font-size="13" fill="#8b2f1d" stroke="none" font-family="Palatino Linotype, Palatino, Georgia, serif">N</text></g></svg>`;
  const pos={1:[68,55],2:[68,70],3:[68,85],4:[5,74],5:[5,57],6:[5,39],7:[5,20],8:[36.5,1],9:[68,20],10:[68,39]};
  stations.forEach(s=>{const b=document.createElement('button');b.className='map-room'+(visited.has(s.id)?' visited':'')+(current===s.id?' current':'');b.style.left=pos[s.id][0]+'%';b.style.top=pos[s.id][1]+'%';b.style.height=s.id===3?'12%':'13%';b.innerHTML=`<span>${String(s.id).padStart(2,'0')}</span><b>${s.title}</b>`;b.setAttribute('aria-label',`${s.id}. ${s.title}${visited.has(s.id)?', odkryta':''}`);b.onclick=()=>{$('map-dialog').close();go(s.id,true);};fp.append(b);});
  [['DZIEDZINIEC<br><small>HARMONII</small>',37,53],['OBSERWATORIUM',37,29],['WIELKA SALA',37,83]].forEach(([html,x,y])=>{const d=document.createElement('div');d.className='map-label';d.innerHTML=html;d.style.left=x+'%';d.style.top=y+'%';fp.append(d);});
@@ -74,17 +79,17 @@ function renderMap(){const fp=$('floorplan');
 function updateUI(){
  activeStation=typeof current==='number'?stations[current-1]:null;
  $('intro').hidden=current!=='gate';$('exhibit').hidden=!activeStation;$('landmark').hidden=!!activeStation||current==='gate';
- document.body.classList.toggle('interior',!['gate','arrival','exit','belvedere'].includes(current));document.body.classList.toggle('station',!!activeStation);
- if(activeStation){const s=activeStation;visited.add(s.id);$('reading').scrollTop=0;$('exhibit').scrollTop=0;setText('station-number',String(s.id).padStart(2,'0'));setText('room-name',s.room.toUpperCase());setText('station-title',s.title);setText('station-idea',s.idea);setText('station-explanation',s.explanation);setText('station-fact',s.fact);setText('video-note',failedVideos.has(s.id)?'Nie udało się wczytać filmu tej komnaty.':s.videoStatus==='replace'?'Film tej komnaty oczekuje na poprawioną wersję.':s.videoNote);$('video-note').classList.toggle('pending',s.videoStatus==='replace');setText('experiment-open',s.interaction+' ↗');}
- else if(current!=='gate'){const def=nodeDefs[current];setText('place-kicker',{finale:'FINAŁ WYSTAWY',exit:'LOGGIA I TARAS',belvedere:'OSTATNI PRZYSTANEK'}[current]||'ARCHITEKTURA ODKRYWANIA');$('place-title').innerHTML=def.title;setText('place-copy',def.copy);}
- setText('location-label',nodeDefs[current].label.toUpperCase());$('route-progress').replaceChildren(...stations.map(s=>{const el=document.createElement('span');el.className=(visited.has(s.id)?'visited ':'')+(current===s.id?'current':'');return el;}));
+ document.body.classList.toggle('interior',!['gate','arrival','exit','belvedere'].includes(current));document.body.classList.toggle('station',!!activeStation);document.body.classList.toggle('at-gate',current==='gate');
+ if(activeStation){const s=activeStation;visited.add(s.id);$('reading').scrollTop=0;$('exhibit').querySelector('.sheet').scrollTop=0;setText('station-number',String(s.id).padStart(2,'0'));setText('room-name',s.room);setText('station-title',s.title);setText('station-idea',s.idea);setText('station-explanation',s.explanation);setText('station-fact',s.fact);setText('video-note',failedVideos.has(s.id)?'Nie udało się wczytać filmu tej komnaty.':s.videoStatus==='replace'?'Film tej komnaty oczekuje na poprawioną wersję.':s.videoNote);$('video-note').classList.toggle('pending',s.videoStatus==='replace');setText('experiment-name',s.interaction);}
+ else if(current!=='gate'){const def=nodeDefs[current];setText('place-kicker',{finale:'Obserwatorium · finał wystawy',exit:'Loggia i taras',belvedere:'Belweder · ostatni przystanek'}[current]||def.label);$('place-title').innerHTML=def.title;setText('place-copy',def.copy);}
+ setText('location-label',nodeDefs[current].label);$('route-progress').replaceChildren(...stations.map(s=>{const el=document.createElement('span');el.className=(visited.has(s.id)?'visited ':'')+(current===s.id?'current':'');return el;}));
  setText('sr-announcement',activeStation?`Komnata ${activeStation.id}: ${activeStation.title}. ${activeStation.idea}`:nodeDefs[current].label);
  for(const [id,v]of videos){if(id===current&&ready&&!document.hidden)playVideo(id,v,true);else v.pause();}
  rebuildHotspots();
 }
 // A rejected play() (e.g. the decoder is briefly busy) is retried while the visitor is still in that room.
 function playVideo(id,v,restart=false){if(restart)v.currentTime=0;v.play().catch(()=>{const retry=()=>{if(current===id&&ready&&!traveling&&!document.hidden&&v.paused)v.play().catch(()=>{});};v.addEventListener('canplay',retry,{once:true});setTimeout(retry,800);});}
-function textBox(){const root=activeStation?$('exhibit'):current==='gate'?$('intro'):$('landmark');if(!root||root.hidden)return null;let b=null;for(const e of activeStation?[root]:root.querySelectorAll('h1,p,.eyebrow,.intro-meta>span')){const r=e.getBoundingClientRect();if(!r.width)continue;b=b?{l:Math.min(b.l,r.left),t:Math.min(b.t,r.top),r:Math.max(b.r,r.right),b:Math.max(b.b,r.bottom)}:{l:r.left,t:r.top,r:r.right,b:r.bottom};}return b;}
+function textBox(){const root=activeStation?$('exhibit'):current==='gate'?$('intro'):$('landmark');if(!root||root.hidden)return null;const r=root.getBoundingClientRect();return r.width?{l:r.left,t:r.top,r:r.right,b:r.bottom}:null;}
 function hotspot(label,target,p,small=false){const b=document.createElement('button');b.className='hotspot'+(small?' small':'');b.innerHTML='<span class="orb" aria-hidden="true"></span><span></span>';b.lastChild.textContent=label;b.setAttribute('aria-label',`Przejdź: ${label}`);b.onclick=()=>go(target);$('hotspots').append(b);hotspots.push({el:b,p});}
 function rebuildHotspots(){hotspots.length=0;$('hotspots').replaceChildren();
  if(current==='gate'){hotspot('Plac przedbramny','arrival',w(0,-120,2.1));return;}
@@ -128,13 +133,18 @@ async function go(to,fromMap=false){
  if(traveling||(!ready&&!accessible)||!nodeDefs[to])return;
  if(to==='gate'||current==='gate')fromMap=true;
  if(accessible){current=to;updateUI();return;}
- traveling=true;document.body.classList.add('cinematic');$('travel').hidden=false;setText('travel-label',nodeDefs[to].label.toUpperCase());
+ // The ceremony starts with the walk from the forecourt. Map jumps into the
+ // interior open immediately; reduced-motion visits use the existing fade.
+ if(!isOutside(to))entranceGates?.open(performance.now(),reduced||fromMap||current!=='arrival'||to!=='hall');
+ traveling=true;document.body.classList.add('cinematic');$('travel').hidden=false;setText('travel-label',nodeDefs[to].label);
  for(const v of videos.values())v.pause();lookYaw=lookPitch=0;
  const points=[camera.position.clone(),...(fromMap||reduced?[nodeDefs[to].p]:route(current,to))];
  const distances=[0];for(let i=1;i<points.length;i++)distances.push(distances.at(-1)+points[i].distanceTo(points[i-1]));
  move={points,distances,total:distances.at(-1),start:performance.now(),duration:fromMap||reduced?450:Math.min(16000,Math.max(4000,distances.at(-1)*145)),target:to,initialLook:lookBase.clone(),teleport:fromMap||reduced};
 }
 function updateMove(now){if(!move)return;const t=Math.min(1,(now-move.start)/move.duration);
+ // Reset only behind the black midpoint of the return-to-intro fade.
+ if(move.teleport&&move.target==='gate'&&t>=.5&&!move.gatesReset){entranceGates?.reset();move.gatesReset=true;}
  // Light the destination as the camera reaches it (at black for fades), not only after stopping. Indoor-outdoor walks keep switching on arrival.
  if(!move.lit&&(move.teleport?t>=.5:t>.72&&!isOutside(current)&&!isOutside(move.target))){move.lit=true;updateLights(move.target);}
  if(move.teleport){$('scene').style.opacity=String(Math.abs(t*2-1));if(t>=.5){camera.position.copy(nodeDefs[move.target].p);lookBase.copy(viewTarget(move.target));camera.lookAt(lookBase);}if(t===1)finishTravel();return;}const ease=t*t*(3-2*t),dist=ease*move.total;camera.position.copy(pathPoint(move,dist));
@@ -178,6 +188,7 @@ async function init(){try{
  const draco=new DRACOLoader().setDecoderPath('vendor/libs/draco/');
  const gltf=await new GLTFLoader().setDRACOLoader(draco).loadAsync('models/castle.glb',e=>{if(e.total){const v=Math.round(e.loaded/e.total*100);$('load-bar').style.width=v+'%';setText('load-text',`Otwieranie zamku · ${v}%`);}});
  draco.dispose();castle=gltf.scene;scene.add(castle);castle.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;if(o.name.includes('00_ENVIRONMENT')&&o.name.includes('Water'))o.visible=false;const mats=Array.isArray(o.material)?o.material:[o.material];for(const m of mats){if(m.map)m.map.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());if(m.name.includes('Slate')||m.name.includes('leaf')||m.name.includes('meadow'))m.side=THREE.DoubleSide;if(m.name.includes('Glass')){m.transmission=0;m.transparent=true;m.opacity=.25;m.depthWrite=false;m.side=THREE.DoubleSide;}}if(o.name.startsWith('Projection_')){const id=Number(o.name.split('_')[1]);addProjection(o,id);}}});
+ entranceGates=createEntranceGates(castle,scene,()=>{renderer.shadowMap.needsUpdate=true;});
  const waterNormal=await new THREE.TextureLoader().loadAsync('models/pass2-water-normal.png');waterNormal.wrapS=waterNormal.wrapT=THREE.RepeatWrapping;
  lake=new Water(new THREE.PlaneGeometry(2400,2400),{textureWidth:768,textureHeight:768,waterNormals:waterNormal,sunDirection:new THREE.Vector3(.55,.38,.85).normalize(),sunColor:0xffe3b8,waterColor:0x234652,distortionScale:1.8,fog:true});lake.name='Reflective alpine lake';lake.rotation.x=-Math.PI/2;lake.position.y=-18.82;scene.add(lake);
  composer=new EffectComposer(renderer);composer.addPass(new RenderPass(scene,camera));aoPass=new SSAOPass(scene,camera,innerWidth,innerHeight,16);aoPass.kernelRadius=1.1;aoPass.minDistance=.0001;aoPass.maxDistance=.025;composer.addPass(aoPass);composer.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),.16,.35,.9));composer.addPass(new OutputPass());
@@ -190,6 +201,7 @@ async function init(){try{
 let lastMetrics=0;
 function animate(now){if(document.hidden){lastTime=now;return;}const dt=Math.min(.1,(now-(lastTime||now))/1000);lastTime=now;worldTime+=dt;frameTimes.push(dt);if(frameTimes.length>120)frameTimes.shift();
  if(lake&&!reduced)lake.material.uniforms.time.value+=dt*.3;
+ entranceGates?.update(now,reduced);
  if(move)updateMove(now);else{
   const dir=lookBase.clone().sub(camera.position);const r=dir.length();const yaw=Math.atan2(dir.x,dir.z)+lookYaw,pitch=Math.asin(dir.y/r)+lookPitch;camera.lookAt(camera.position.clone().add(new THREE.Vector3(Math.sin(yaw)*Math.cos(pitch)*r,Math.sin(pitch)*r,Math.cos(yaw)*Math.cos(pitch)*r)));
  }
@@ -209,7 +221,7 @@ function animate(now){if(document.hidden){lastTime=now;return;}const dt=Math.min
  for(const [id,mesh]of screens)mesh.visible=id===current||traveling;
  if($('experiment-dialog').open&&activeStation)drawExperiment($('experiment-canvas'),activeStation.id,Number($('parameter').value),experimentTime());
  renderer.info.reset();if(quality)composer.render();else renderer.render(scene,camera);
- if(now-lastMetrics>1500){lastMetrics=now;const avg=frameTimes.reduce((a,b)=>a+b,0)/frameTimes.length;sceneStatus.metrics={fps:Math.round(1/avg),drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,textures:renderer.info.memory.textures,geometries:renderer.info.memory.geometries,location:String(current),playingVideos:[...videos.values()].filter(v=>!v.paused).length};if($('diagnostics'))$('diagnostics').textContent=JSON.stringify({...sceneStatus.metrics,errors:sceneStatus.errors},null,2);}
+ if(now-lastMetrics>1500){lastMetrics=now;const avg=frameTimes.reduce((a,b)=>a+b,0)/frameTimes.length;sceneStatus.metrics={fps:Math.round(1/avg),drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,textures:renderer.info.memory.textures,geometries:renderer.info.memory.geometries,location:String(current),playingVideos:[...videos.values()].filter(v=>!v.paused).length,gateOpenPercent:entranceGates?Math.round(entranceGates.fraction*100):null};if($('diagnostics'))$('diagnostics').textContent=JSON.stringify({...sceneStatus.metrics,errors:sceneStatus.errors},null,2);}
 }
 let dragging=false,dragX=0,dragY=0;
 $('scene').addEventListener('pointerdown',e=>{if(traveling)return;dragging=true;dragX=e.clientX;dragY=e.clientY;$('scene').setPointerCapture(e.pointerId);});
@@ -223,5 +235,3 @@ document.querySelector('.skip').onclick=e=>{e.preventDefault();const t=activeSta
 $('accessible-open').onclick=()=>{accessible=true;document.body.classList.add('accessible');current=1;updateUI();};
 initMusic($('castle-music'),$('sound'),message=>setText('sr-announcement',message));
 init();
-
-
