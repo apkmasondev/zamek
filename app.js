@@ -224,9 +224,11 @@ function animate(now){if(document.hidden){lastTime=now;return;}const dt=Math.min
  if(now-lastMetrics>1500){lastMetrics=now;const avg=frameTimes.reduce((a,b)=>a+b,0)/frameTimes.length;sceneStatus.metrics={fps:Math.round(1/avg),drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,textures:renderer.info.memory.textures,geometries:renderer.info.memory.geometries,location:String(current),playingVideos:[...videos.values()].filter(v=>!v.paused).length,gateOpenPercent:entranceGates?Math.round(entranceGates.fraction*100):null};if($('diagnostics'))$('diagnostics').textContent=JSON.stringify({...sceneStatus.metrics,errors:sceneStatus.errors},null,2);}
 }
 let dragging=false,dragX=0,dragY=0;
-$('scene').addEventListener('pointerdown',e=>{if(traveling)return;dragging=true;dragX=e.clientX;dragY=e.clientY;$('scene').setPointerCapture(e.pointerId);});
+// Looking around must never start a text selection over the cards or labels the pointer passes.
+$('scene').addEventListener('pointerdown',e=>{if(e.pointerType==='mouse')e.preventDefault();getSelection()?.removeAllRanges();if(traveling)return;dragging=true;document.body.classList.add('dragging');dragX=e.clientX;dragY=e.clientY;$('scene').setPointerCapture(e.pointerId);});
 $('scene').addEventListener('pointermove',e=>{if(!dragging)return;lookYaw-= (e.clientX-dragX)*.003;lookPitch+= (e.clientY-dragY)*.002;lookPitch=THREE.MathUtils.clamp(lookPitch,-.65,.75);lookYaw=THREE.MathUtils.clamp(lookYaw,-1.45,1.45);dragX=e.clientX;dragY=e.clientY;});
-for(const ev of ['pointerup','pointercancel'])$('scene').addEventListener(ev,()=>dragging=false);
+document.addEventListener('selectstart',e=>{if(dragging)e.preventDefault();});
+for(const ev of ['pointerup','pointercancel','lostpointercapture'])$('scene').addEventListener(ev,()=>{dragging=false;document.body.classList.remove('dragging');});
 addEventListener('resize',()=>{if(!renderer)return;camera.aspect=innerWidth/innerHeight;camera.fov=innerWidth<600?88:48;camera.updateProjectionMatrix();if(!traveling){lookBase.copy(viewTarget(current));lookYaw=lookPitch=0;}renderer.setSize(innerWidth,innerHeight);if(composer)composer.setSize(innerWidth,innerHeight);});
 document.addEventListener('visibilitychange',()=>{for(const [id,v]of videos)if(document.hidden)v.pause();else if(id===current&&ready&&!traveling)playVideo(id,v);});
 addEventListener('resize',()=>{if($('map-dialog').open)renderMap();});

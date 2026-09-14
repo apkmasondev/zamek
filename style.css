@@ -17,6 +17,8 @@ button { font: inherit; color: inherit; cursor: pointer; border: 0; background: 
 a { color: inherit; touch-action: manipulation }
 button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--brass-light); outline-offset: 4px }
 [hidden] { display: none !important }
+/* Controls, markers and scene chrome are never selectable; reading text on the cards still is, except while looking around. */
+header, footer, #hotspots, .travel, .loading, #scene, button, label, .dragging, .dragging * { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none }
 
 #world, #scene, .vignette { position: absolute; inset: 0; width: 100%; height: 100% }
 #scene { display: block; touch-action: none }
