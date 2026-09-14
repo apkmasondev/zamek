@@ -1,0 +1,64 @@
+/* A museum catalogue plate: limestone, engraved brass, quiet typography. */
+/* The opaque card needs no dark backdrop; hall, courtyard and observatory text keep the darker vignette from style.css. */
+.interior.station .vignette {
+  background: linear-gradient(180deg,#061016c9,transparent 26%,transparent 64%,#0610168c);
+}
+.exhibit {
+  left: 3.5vw; bottom: 11vh; width: 360px;
+  max-height: calc(100dvh - 165px); padding: 23px 25px 17px;
+  color: #34372f; background: linear-gradient(125deg,#ede7d8,#d7cfbd);
+  border: 1px solid #bcaa83;
+  box-shadow: inset 0 0 0 5px #e5decd,inset 0 0 0 6px #b2a17b70,0 12px 35px #07101238;
+  scrollbar-color: #8d7a52 #d8cfbc; scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+}
+.catalogue-line {display:flex;justify-content:space-between;gap:10px;font:8px/1.5 Arial,sans-serif;letter-spacing:1.6px;color:#786744;border-bottom:1px solid #a08c604d;padding-bottom:13px;margin-bottom:19px}
+.exhibit-heading {gap:15px;margin-bottom:19px;align-items:center}
+.station-number {display:grid;place-items:center;flex:0 0 44px;height:50px;padding:0;border:1px solid #9e8a61;font:25px/1 Georgia,serif;color:#77613a;border-radius:22px 22px 2px 2px}
+.exhibit-heading h1 {font:normal 30px/1.12 Georgia,serif;letter-spacing:-.5px;margin:5px 0 0;color:#30372e}
+.exhibit-heading .eyebrow {font:8px/1.55 Arial,sans-serif;letter-spacing:1.1px;color:#786744;max-width:240px}
+.station-idea {font:normal 18px/1.5 Georgia,serif;color:#363a30;margin:0 0 15px}
+#station-explanation {font:12px/1.8 Arial,sans-serif;color:#53574c}
+.fact {margin:17px 0;padding:14px 0 0;border:0;border-top:1px solid #a08c604d}
+.fact>span {font:8px/1.4 Arial,sans-serif;letter-spacing:1.7px;color:#786744}
+.fact>p {font:14px/1.65 Georgia,serif;color:#434638;margin:6px 0 0}
+.exhibit-actions {border-top:1px solid #a08c604d;padding-top:10px;gap:4px 15px}
+.exhibit-actions>button:first-child {flex:1 0 100%;border:0;padding:7px 0;text-align:left;font:15px/1.5 Georgia,serif;color:#67512b;letter-spacing:0}
+.exhibit-actions .text-button {font:10px/1.5 Arial,sans-serif;padding:7px 0;color:#655c48;border-bottom:1px solid #a08c6050}
+.exhibit button:hover {color:#241b0c;text-decoration:underline;text-underline-offset:4px}
+.exhibit button:focus-visible {outline-color:#755b28;outline-offset:3px}
+.video-note,.video-note.pending {font:10px/1.6 Arial,sans-serif;color:#666657;padding-top:4px;margin:9px 0 0;max-width:none}
+.reading-collapsed .exhibit {width:360px}
+.reading-collapsed .catalogue-line {margin-bottom:14px}
+@media(min-width:1650px) {
+  .exhibit,.reading-collapsed .exhibit {width:395px;padding:26px 29px 20px}
+  .exhibit-heading h1 {font-size:34px}
+  #station-explanation {font-size:13px}
+  .station-idea {font-size:19px}
+  .fact>p {font-size:15px}
+}
+@media(max-width:900px) and (min-width:601px) {
+  .exhibit,.reading-collapsed .exhibit {width:310px;left:24px;padding:21px 21px 16px}
+}
+@media(max-width:600px) {
+  .exhibit,.reading-collapsed .exhibit {left:16px;right:16px;bottom:60px;width:auto;max-height:43dvh;padding:18px 20px 15px}
+  .catalogue-line {font-size:7px;margin-bottom:13px;padding-bottom:10px}
+  .exhibit-heading {gap:12px;margin-bottom:13px}
+  .exhibit-heading h1 {font-size:28px}
+  .exhibit-heading .eyebrow {font-size:7px}
+  .station-number {font-size:23px;flex-basis:40px;height:46px}
+  .station-idea {font-size:17px;margin-bottom:12px}
+  .exhibit-actions .text-button {min-height:38px;display:flex;align-items:center}
+}
+.accessible .exhibit {max-height:calc(100dvh - 160px)}
+/* Without the 3D loop nothing positions the markers, so list them as ordinary buttons. */
+.accessible #hotspots {position:absolute;right:5vw;bottom:100px;z-index:6;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.accessible .hotspot {position:static;transform:none;flex-direction:row}
+@media(max-width:600px) {.accessible #hotspots {bottom:auto;top:80px;right:16px}}
+/* On phones the plan is narrow: keep place names inside their outlines. */
+@media(max-width:600px) {.map-label {font-size:6.5px;letter-spacing:.1px}.map-label small {font-size:5.5px;letter-spacing:1px}}
+@media(min-width:601px) {
+  .exhibit {display:flex;flex-direction:column;overflow:hidden;scrollbar-gutter:auto}
+  .exhibit>* {flex-shrink:0}
+  .exhibit #reading {flex-shrink:1;min-height:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#9b8861 transparent;padding-right:6px}
+}

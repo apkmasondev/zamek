@@ -1,0 +1,376 @@
+[
+  {
+    "id": 1,
+    "title": "Światło",
+    "subtitle": "To, co widzisz, jest tylko fragmentem.",
+    "room": "Galeria rozszczepionego światła",
+    "artifact": "Pryzmat i wachlarz widma",
+    "color": "#eccb8e",
+    "position": [
+      25,
+      -4
+    ],
+    "idea": "Białe światło może zawierać wiele barw naraz.",
+    "explanation": "W szkle różne długości fali załamują się pod różnymi kątami. Pryzmat rozdziela je w widmo. Barwy nie powstają w szkle — były już obecne w padającym świetle.",
+    "fact": "Światło widzialne to tylko niewielki fragment widma elektromagnetycznego.",
+    "detail": "W zwykłym szklanym pryzmacie fiolet odchyla się silniej niż czerwień. Świetlne wstęgi instalacji są diagramem: w czystym powietrzu nie oglądamy wiązki z boku bez rozpraszających ją drobin.",
+    "sources": [
+      [
+        "NASA · Visible Light",
+        "https://science.nasa.gov/ems/09_visiblelight/"
+      ],
+      [
+        "NASA · Lighting & Optics",
+        "https://ntrs.nasa.gov/api/citations/19710016467/downloads/19710016467.pdf"
+      ]
+    ],
+    "video": "01-swiatlo",
+    "videoStatus": "illustration",
+    "videoNote": "Artystyczna wizualizacja dyspersji. Powielone pasma barw i rozbłyski nie odwzorowują dokładnego toru promieni.",
+    "interaction": "Rozsuń widmo",
+    "control": "Rozszczepienie",
+    "unit": "",
+    "min": 0,
+    "max": 100,
+    "value": 70,
+    "acceptedBy": "user",
+    "acceptedOn": "2026-09-13"
+  },
+  {
+    "id": 2,
+    "title": "Czas",
+    "subtitle": "Jak złapać coś, co wciąż płynie?",
+    "room": "Komnata miar czasu",
+    "artifact": "Monumentalne wahadło i pierścienie miar",
+    "color": "#bfc7e9",
+    "position": [
+      25,
+      -24
+    ],
+    "idea": "Zegar mierzy czas, licząc powtarzalne zjawiska.",
+    "explanation": "Cień, wahadło i atom dostarczają różnych sposobów wyznaczania rytmu. Dzisiejsza definicja sekundy odwołuje się do określonego przejścia w atomie cezu-133. Nie do obrotu Ziemi, który nie jest idealnie regularny.",
+    "fact": "Sekundzie odpowiada dokładnie 9 192 631 770 okresów promieniowania określonego przejścia atomu cezu-133.",
+    "detail": "Chodzi o niezakłócone przejście nadsubtelne stanu podstawowego. Atomy nie są miniaturowymi wahadłami. W interakcji obok wydłużenie wahadła zwiększa jego okres; model zakłada małe wychylenie i pomija opór.",
+    "sources": [
+      [
+        "NIST · Second: Introduction",
+        "https://www.nist.gov/si-redefinition/second-introduction"
+      ],
+      [
+        "OpenStax · Pendulums",
+        "https://openstax.org/books/university-physics-volume-1/pages/15-4-pendulums"
+      ]
+    ],
+    "video": "02-czas",
+    "videoStatus": "illustration",
+    "videoNote": "Artystyczna ilustracja ruchu wahadła i powtarzalności zjawisk. Film nie służy do pomiaru czasu.",
+    "interaction": "Zmień rytm wahadła",
+    "control": "Długość wahadła",
+    "unit": "m",
+    "min": 1,
+    "max": 4,
+    "value": 2,
+    "acceptedBy": "user",
+    "acceptedOn": "2026-09-13"
+  },
+  {
+    "id": 3,
+    "title": "Grawitacja",
+    "subtitle": "Spadanie, które nie ma końca.",
+    "room": "Rotunda swobodnego spadku",
+    "artifact": "Orrerium nad mapą krzywizny",
+    "color": "#a8cae7",
+    "position": [
+      25,
+      -44
+    ],
+    "idea": "Orbita jest nieustannym swobodnym spadkiem.",
+    "explanation": "Satelita spada ku Ziemi, ale jego ruch w bok sprawia, że wciąż ją omija. Ogólna teoria względności opisuje grawitację przez geometrię czasoprzestrzeni. Zakrzywiona siatka pomaga wyobrazić sobie tę ideę, lecz nie jest dosłownym obrazem przestrzeni.",
+    "fact": "W próżni dwa małe ciała puszczone w tym samym miejscu spadają jednakowo, niezależnie od ich masy.",
+    "detail": "Rysunek gumowej membrany pomija wymiar czasu i używa zewnętrznej grawitacji, by wyjaśnić grawitację — ma więc granice. Orrerium pokazuje umowną orbitę, bez zachowania skali odległości i rozmiarów.",
+    "sources": [
+      [
+        "Max Planck / Einstein Online · Curvature",
+        "https://www.einstein-online.info/en/spotlight/geometry_force/"
+      ],
+      [
+        "Einstein Online · Equivalence principle",
+        "https://www.einstein-online.info/en/explandict/equivalence-principle/"
+      ],
+      [
+        "NASA · What Is an Orbit?",
+        "https://www.nasa.gov/learning-resources/for-kids-and-students/what-is-an-orbit-grades-5-8/"
+      ]
+    ],
+    "video": "03-grawitacja",
+    "videoStatus": "illustration",
+    "videoNote": "Siatka jest analogią, a rozmiary Ziemi i Księżyca nie zachowują skali.",
+    "interaction": "Obejrzyj orbitę",
+    "control": "Położenie na orbicie",
+    "unit": "°",
+    "min": 0,
+    "max": 360,
+    "value": 45
+  },
+  {
+    "id": 4,
+    "title": "Ruch",
+    "subtitle": "Nic nie rusza się bez dalszego ciągu.",
+    "room": "Galeria przekazanego pędu",
+    "artifact": "Mosiężna kołyska pięciu kul",
+    "color": "#e0d6bd",
+    "position": [
+      -25,
+      -24
+    ],
+    "idea": "W zderzeniu ruch może przejść z jednego ciała na drugie.",
+    "explanation": "Pęd zależy od masy i prędkości, a także od kierunku ruchu. Gdy wypadkowa siła zewnętrzna jest zerowa, całkowity pęd układu pozostaje stały. W rzeczywistych zderzeniach część energii ruchu zamienia się w ciepło, dźwięk i odkształcenia.",
+    "fact": "W idealnym sprężystym zderzeniu dwóch równych mas poruszających się po jednej prostej ciała zamieniają się prędkościami.",
+    "detail": "Model interaktywny dotyczy dwóch równych mas, z których druga początkowo spoczywa. Współczynnik sprężystości e zmienia podział prędkości, nie sumę pędu. Kołyska jest artefaktem ilustrującym temat, nie pomiarem idealnego zderzenia.",
+    "sources": [
+      [
+        "NASA Glenn · Conservation of Momentum",
+        "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/conservation-of-momentum-2/"
+      ],
+      [
+        "OpenStax · Collisions in One Dimension",
+        "https://openstax.org/books/university-physics-volume-1/pages/9-4-types-of-collisions"
+      ]
+    ],
+    "video": "04-ruch",
+    "videoStatus": "illustration",
+    "videoNote": "Uproszczona wizualizacja zderzenia; film nie służy do pomiaru pędu ani energii.",
+    "interaction": "Porównaj zderzenia",
+    "control": "Sprężystość zderzenia",
+    "unit": "",
+    "min": 0,
+    "max": 1,
+    "value": 1
+  },
+  {
+    "id": 5,
+    "title": "Energia",
+    "subtitle": "Zmienia postać. Zostawia ślad.",
+    "room": "Kuźnia przemian",
+    "artifact": "Turbina w świetlnym pierścieniu",
+    "color": "#f3b26c",
+    "position": [
+      -25,
+      -4
+    ],
+    "idea": "Energia zmienia postać, ale bilans musi się zgadzać.",
+    "explanation": "Wahadło przyspiesza, opadając: energia potencjalna grawitacji zmienia się w kinetyczną. Wznosząc się, zwalnia i odwraca tę przemianę. Opór powietrza i tarcie przekazują część energii do otoczenia, zwykle jako ciepło.",
+    "fact": "Nawet kiedy urządzenie się zatrzymuje, jego energia nie przepada: trzeba szukać jej także w otoczeniu.",
+    "detail": "Interakcja to umowny bilans 100 jednostek energii wejściowej, a nie pomiar konkretnej elektrowni. Przy sprawności η energia użyteczna wynosi 100η, a pozostała część trafia do otoczenia. Zasada dotyczy określonego układu i jego wymiany z otoczeniem.",
+    "sources": [
+      [
+        "EIA · Laws of energy",
+        "https://www.eia.gov/energyexplained/what-is-energy/laws-of-energy.php"
+      ],
+      [
+        "OpenStax · Pendulums",
+        "https://openstax.org/books/university-physics-volume-1/pages/15-4-pendulums"
+      ]
+    ],
+    "video": "05-energia",
+    "videoStatus": "illustration",
+    "videoNote": "Wahadło ilustruje przemianę energii potencjalnej i kinetycznej. Ruch nie jest pomiarem.",
+    "interaction": "Sprawdź bilans energii",
+    "control": "Sprawność umownego urządzenia",
+    "unit": "%",
+    "min": 10,
+    "max": 90,
+    "value": 65
+  },
+  {
+    "id": 6,
+    "title": "Elektryczność",
+    "subtitle": "Obwód zamknięty. Możliwość otwarta.",
+    "room": "Gabinet obwodów",
+    "artifact": "Miedziany obwód z ceramicznym izolatorem",
+    "color": "#92cfdf",
+    "position": [
+      -25,
+      16
+    ],
+    "idea": "Żarówka pobiera energię, a nie zużywa ładunku.",
+    "explanation": "Prąd to uporządkowany przepływ ładunku. Źródło napięcia umożliwia przekazywanie energii w zamkniętym obwodzie. W ustalonym prostym obwodzie szeregowym prąd przed żarówką i za nią jest taki sam.",
+    "fact": "Elektrony nie znikają w świecącej żarówce.",
+    "detail": "Miedziany układ to schemat przestrzenny. Interakcja przedstawia idealny opornik o stałym oporze 10 Ω: I = U/R, P = UI. Prawdziwe włókno żarówki nagrzewa się, a jego opór zmienia się z temperaturą.",
+    "sources": [
+      [
+        "The Physics Classroom · Electric Current",
+        "https://www.physicsclassroom.com/class/circuits/Lesson-2/Electric-Current"
+      ],
+      [
+        "OpenStax · Ohm’s Law",
+        "https://openstax.org/books/university-physics-volume-2/pages/9-4-ohms-law"
+      ]
+    ],
+    "video": "06-elektrycznosc",
+    "videoStatus": "illustration",
+    "videoNote": "Artystyczna ilustracja działania obwodu elektrycznego. Mechanika wyłącznika jest umowna; film nie jest dokładnym schematem technicznym.",
+    "interaction": "Zasil obwód",
+    "control": "Napięcie źródła",
+    "unit": "V",
+    "min": 0,
+    "max": 12,
+    "value": 6,
+    "acceptedBy": "user",
+    "acceptedOn": "2026-09-13"
+  },
+  {
+    "id": 7,
+    "title": "Magnetyzm",
+    "subtitle": "Niewidzialne ma swój kierunek.",
+    "room": "Komnata linii pola",
+    "artifact": "Dipol w przestrzennej klatce linii pola",
+    "color": "#b8abd9",
+    "position": [
+      -25,
+      36
+    ],
+    "idea": "Pole magnetyczne opisuje oddziaływanie w każdym punkcie przestrzeni.",
+    "explanation": "Igła kompasu ustawia się wzdłuż lokalnego pola. Opiłki pomagają zobaczyć jego układ, ale linie pola są narzędziem opisu, nie materialnymi nićmi. Wokół magnesu sztabkowego linie wracają przez jego wnętrze.",
+    "fact": "Rozcięcie zwykłego magnesu daje mniejsze magnesy z dwoma biegunami, a nie osobny biegun północny i południowy.",
+    "detail": "Na zewnątrz magnesu strzałki linii biegną od N do S; wewnątrz wracają. Model dipola jest uproszczeniem. Ziemskie pole nie jest idealnie symetryczne i zmienia się w czasie.",
+    "sources": [
+      [
+        "OpenStax · Magnetic Fields and Lines",
+        "https://openstax.org/books/university-physics-volume-2/pages/11-2-magnetic-fields-and-lines"
+      ],
+      [
+        "OpenStax · Magnetism and Its Historical Discoveries",
+        "https://openstax.org/books/university-physics-volume-2/pages/11-1-magnetism-and-its-historical-discoveries"
+      ]
+    ],
+    "video": "07-magnetyzm",
+    "videoStatus": "illustration",
+    "videoNote": "Świetlne linie to umowny zapis pola, nie widoczne struktury otaczające magnes.",
+    "interaction": "Obróć magnes",
+    "control": "Orientacja dipola",
+    "unit": "°",
+    "min": -90,
+    "max": 90,
+    "value": 0
+  },
+  {
+    "id": 8,
+    "title": "Materia",
+    "subtitle": "Ten sam skład. Inny porządek.",
+    "room": "Tryptyk stanów materii",
+    "artifact": "Trzy gabloty jednego układu",
+    "color": "#d0b5dc",
+    "position": [
+      0,
+      49
+    ],
+    "idea": "Zmiana stanu skupienia nie musi zmieniać rodzaju cząsteczek.",
+    "explanation": "W ciele stałym cząsteczki drgają wokół uporządkowanych lub utrwalonych położeń. W cieczy mogą się przemieszczać względem sąsiadów, a w gazie są zwykle znacznie bardziej oddalone. Ogrzewanie może zmieniać ich ruch i wzajemne ułożenie.",
+    "fact": "Podczas topnienia czystej substancji w stałym ciśnieniu energia może napływać bez wzrostu temperatury.",
+    "detail": "Gabloty są modelem cząsteczkowym, bez skali. Kulki oznaczają całe cząsteczki, nie krople. Ich rozmiar się nie zmienia. Stan skupienia zależy także od ciśnienia; suwak porównuje trzy schematy, a nie symuluje przejścia fazowego.",
+    "sources": [
+      [
+        "OpenStax · Phase Changes",
+        "https://openstax.org/books/university-physics-volume-2/pages/1-5-phase-changes"
+      ],
+      [
+        "OpenStax · Molecular Model of an Ideal Gas",
+        "https://openstax.org/books/university-physics-volume-2/pages/2-1-molecular-model-of-an-ideal-gas"
+      ]
+    ],
+    "video": "08-materia",
+    "videoStatus": "illustration",
+    "videoNote": "Trzy osobne próbki; wielkości, odległości i ruch pokazano umownie.",
+    "interaction": "Porównaj układ cząsteczek",
+    "control": "Stan: stały · ciekły · gazowy",
+    "unit": "",
+    "min": 0,
+    "max": 2,
+    "value": 0
+  },
+  {
+    "id": 9,
+    "title": "Życie",
+    "subtitle": "Z zapisu powstaje działanie.",
+    "room": "Oranżeria informacji biologicznej",
+    "artifact": "Helisa, nić RNA i rybosomalna rzeźba",
+    "color": "#afcdaa",
+    "position": [
+      25,
+      36
+    ],
+    "idea": "Komórka korzysta z informacji DNA za pośrednictwem RNA.",
+    "explanation": "W transkrypcji na matrycy DNA powstaje RNA. Podczas translacji rybosom odczytuje mRNA i łączy aminokwasy w łańcuch białkowy. To dwa różne etapy, wymagające wielu cząsteczek i energii.",
+    "fact": "Rybosom zawiera zarówno białka, jak i RNA — RNA jest również częścią maszynerii, nie tylko wiadomością.",
+    "detail": "Nie każdy gen koduje białko. Niektóre RNA pełnią własne funkcje. Instalacja pokazuje uproszczoną drogę ekspresji genu kodującego białko; rozmiary DNA, RNA i rybosomu nie zachowują skali.",
+    "sources": [
+      [
+        "NHGRI / NIH · RNA Fact Sheet",
+        "https://www.genome.gov/about-genomics/educational-resources/fact-sheets/ribonucleic-acid-fact-sheet"
+      ],
+      [
+        "NHGRI / NIH · Ribosome",
+        "https://www.genome.gov/genetics-glossary/Ribosome"
+      ],
+      [
+        "NHGRI / NIH · Translation",
+        "https://www.genome.gov/genetics-glossary/Translation"
+      ]
+    ],
+    "video": "09-zycie",
+    "videoStatus": "illustration",
+    "videoNote": "DNA → RNA → białko. Pominięto wiele cząsteczek uczestniczących w procesie; skala jest umowna.",
+    "interaction": "Prześledź drogę informacji",
+    "control": "Etap: DNA · RNA · białko",
+    "unit": "",
+    "min": 0,
+    "max": 2,
+    "value": 0
+  },
+  {
+    "id": 10,
+    "title": "Informacja i AI",
+    "subtitle": "Prawdopodobne nie znaczy prawdziwe.",
+    "room": "Biblioteka możliwych odpowiedzi",
+    "artifact": "Tokeny w mosiężnym archiwum zależności",
+    "color": "#b7d7d8",
+    "position": [
+      25,
+      16
+    ],
+    "idea": "Autoregresyjny model językowy generuje odpowiedź token po tokenie.",
+    "explanation": "Tokenizer dzieli tekst na elementy i przypisuje im identyfikatory. Embeddingi zamieniają je w wektory liczb, a attention łączy informacje z dostępnego kontekstu. Model wyznacza rozkład możliwych następnych tokenów; reguła dekodowania wybiera kolejny.",
+    "fact": "Płynna i przekonująca odpowiedź może zawierać zmyślony fakt.",
+    "detail": "Attention to obliczenie ważonej kombinacji reprezentacji, nie ludzka uwaga. Wybrany token dołącza do kontekstu przed następnym krokiem. Podział na tokeny zależy od tokenizera. Pokaz obok ma ręcznie ustalone prawdopodobieństwa i nie uruchamia LLM; ilustruje wpływ kontekstu, nie rzeczywisty pomiar modelu.",
+    "sources": [
+      [
+        "Vaswani et al. · Attention Is All You Need",
+        "https://arxiv.org/abs/1706.03762"
+      ],
+      [
+        "Hugging Face · Tokenizers",
+        "https://huggingface.co/learn/llm-course/chapter2/4"
+      ],
+      [
+        "Hugging Face · Text generation",
+        "https://huggingface.co/docs/transformers/main/en/llm_tutorial"
+      ],
+      [
+        "NIST · Generative AI Profile",
+        "https://doi.org/10.6028/NIST.AI.600-1"
+      ]
+    ],
+    "video": "10-ai",
+    "videoStatus": "illustration",
+    "videoNote": "Artystyczna ilustracja sieci i tokenów. Napisy i procenty nie są wynikami pomiarów ani zapisem działania modelu.",
+    "interaction": "Zmień kontekst zdania",
+    "control": "Kontekst: budowla · mechanizm",
+    "unit": "",
+    "min": 0,
+    "max": 1,
+    "value": 0,
+    "acceptedBy": "user",
+    "acceptedOn": "2026-09-13"
+  }
+]

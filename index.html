@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pl">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+ <meta name="theme-color" content="#111b20"><meta name="description" content="Zamek Tajemnic Rzeczywistości. Dziesięć przestrzennych instalacji o prawach natury i informacji.">
+ <title>Zamek Tajemnic Rzeczywistości — wystawa</title>
+ <link rel="icon" type="image/svg+xml" href="mark.svg"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="exhibit-card.css">
+ <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/"}}</script>
+</head>
+<body>
+ <a class="skip" href="#exhibit">Przejdź do treści wystawy</a>
+ <main id="world" aria-label="Przestrzeń zamku"><canvas id="scene" aria-label="Interaktywny widok zamku. Przeciągnij, aby się rozejrzeć. Wybierz świecący znacznik, aby przejść do komnaty."></canvas></main>
+ <div class="vignette" aria-hidden="true"></div>
+ <header>
+  <a href="./" class="brand" aria-label="Zamek Tajemnic Rzeczywistości — widok zamku"><img src="mark.svg" alt="" width="45" height="52"><span>ZAMEK TAJEMNIC<br><b>RZECZYWISTOŚCI</b></span></a>
+  <span class="header-center">NAUKA <i>◆</i> SZTUKA <i>◆</i> ODKRYWANIE</span>
+  <nav aria-label="Narzędzia zwiedzania"><button id="map-open"><span class="map-icon" aria-hidden="true">⌘</span> Plan zamku</button><button id="about-open" aria-label="O wystawie">i</button><button id="sound" aria-label="Włącz muzykę" aria-pressed="false">♪<span class="sound-off">/</span></button></nav>
+ </header>
+ <section id="intro" class="intro">
+  <p class="eyebrow">INTERAKTYWNE MUZEUM RZECZYWISTOŚCI</p>
+  <h1>Świat skrywa<br>więcej, niż <em>widzisz.</em></h1>
+  <p class="intro-copy">Przekrocz próg. Od światła do sztucznej inteligencji —<br>dziesięć komnat, które zmieniają sposób patrzenia.</p>
+  <div class="intro-meta"><span>10 <small>ARTEFAKTÓW</small></span><b>—</b><span>∞ <small>PYTAŃ</small></span></div>
+ </section>
+ <div id="landmark" class="landmark" hidden><span id="place-kicker" class="eyebrow"></span><h1 id="place-title"></h1><p id="place-copy"></p></div>
+ <audio id="castle-music" preload="none" loop aria-label="Castello della Scienza">
+  <source src="audio/castello-della-scienza.ogg" type="audio/ogg; codecs=opus">
+  <source src="audio/castello-della-scienza.m4a" type="audio/mp4">
+ </audio>
+ <section id="exhibit" class="exhibit" hidden aria-live="polite" aria-label="Karta eksponatu">
+  <div class="catalogue-line" aria-hidden="true"><span>ZAMEK TAJEMNIC</span><span>KARTA KOMNATY</span></div>
+  <div class="exhibit-heading"><span id="station-number" class="station-number">01</span><div><p id="room-name" class="eyebrow"></p><h1 id="station-title"></h1></div></div>
+  <p id="station-idea" class="station-idea"></p>
+  <div id="reading"><p id="station-explanation"></p><div class="fact"><span>OBSERWACJA</span><p id="station-fact"></p></div></div>
+  <div class="exhibit-actions"><button id="experiment-open">Zbadaj zjawisko <span>↗</span></button><button id="details-open" class="text-button">Głębiej i źródła</button><button id="reading-toggle" class="text-button" aria-expanded="true">Zwiń opis</button></div>
+  <p id="video-note" class="video-note"></p>
+ </section>
+ <div id="hotspots" aria-label="Przejścia w przestrzeni"></div>
+ <div id="travel" class="travel" hidden><span class="travel-line"></span><p id="travel-label"></p></div>
+ <footer><span id="location-label">PRZED BRAMĄ ZAMKU</span><div class="route-progress" id="route-progress" aria-label="Odkryte komnaty"></div><span id="gesture-hint">PRZECIĄGNIJ, BY SIĘ ROZEJRZEĆ <span>↔</span></span></footer>
+ <noscript><div class="failure"><h2>Spacer wymaga JavaScriptu.</h2><p>Włącz JavaScript w przeglądarce i odśwież stronę, aby zwiedzać zamek w 3D.</p></div></noscript>
+ <div id="loading" class="loading"><img src="mark.svg" alt="" width="58"><p class="eyebrow">ZAMEK TAJEMNIC RZECZYWISTOŚCI</p><h2>Za chwilę otworzy się nowy świat.</h2><div class="load-track"><span id="load-bar"></span></div><p id="load-text">Przygotowywanie przestrzeni…</p></div>
+ <div id="failure" class="failure" hidden><h2>Przestrzeń nie została wczytana.</h2><p id="failure-message"></p><button onclick="location.reload()">Spróbuj ponownie</button><button id="accessible-open">Czytaj wystawę bez 3D</button></div>
+ <dialog id="map-dialog" class="map-dialog"><button class="close" data-close aria-label="Zamknij plan">×</button><div class="map-heading"><p class="eyebrow">TWÓJ SZLAK ODKRYĆ</p><h2>Dziesięć komnat.<br> <em>Jedna rzeczywistość.</em></h2><p>Wybierz komnatę na planie lub podążaj<br>za światłem w przejściach.</p><p id="map-count" class="map-count">Odkryto 0 z 10 komnat</p><button id="return-gate" class="text-button">↙ Wróć przed bramę</button></div><div id="floorplan" class="floorplan"></div></dialog>
+ <dialog id="detail-dialog" class="detail-dialog"><button class="close" data-close aria-label="Zamknij szczegóły">×</button><p class="eyebrow">ZA KULISAMI ZJAWISKA</p><h2 id="detail-title"></h2><p id="detail-copy"></p><h3>Skąd to wiemy?</h3><ul id="source-list"></ul><p class="small">Źródła sprawdzone 13 września 2026. Modele wystawowe są uproszczeniami; ich granice opisano powyżej.</p></dialog>
+ <dialog id="experiment-dialog" class="experiment-dialog"><button class="close" data-close aria-label="Zamknij doświadczenie">×</button><p class="eyebrow" id="experiment-kicker"></p><h2 id="experiment-title"></h2><canvas id="experiment-canvas" width="1000" height="450" aria-label="Schemat zjawiska zmieniany suwakiem"></canvas><label for="parameter" id="parameter-label"></label><div class="range-row"><input id="parameter" type="range"><output id="parameter-value" for="parameter"></output></div><p id="experiment-result" class="experiment-result" aria-live="polite"></p><p id="experiment-limit" class="small"></p></dialog>
+ <dialog id="about-dialog" class="detail-dialog"><button class="close" data-close aria-label="Zamknij informacje">×</button><p class="eyebrow">O WYSTAWIE</p><h2>Piękno prowadzi.<br><em>Ciekawość zostaje.</em></h2><p>Wystawa łączy autorską architekturę, przestrzenne artefakty i sprawdzoną wiedzę. Odwiedzaj komnaty we własnym rytmie. Nie ma punktów ani limitu czasu.</p><h3>Jak zwiedzać</h3><p>Wybieraj świetlne znaczniki z nazwami miejsc. Przeciągnij widok, żeby rozejrzeć się po sali. Plan zamku pozwala wrócić do dowolnej komnaty. Klawisz M otwiera plan, Escape zamyka okno, a Tab przechodzi między dostępnymi elementami.</p><label class="setting"><input type="checkbox" id="reduced-motion"> Spokojne przejścia bez ruchu kamery</label><label class="setting"><input type="checkbox" id="high-quality" checked> Wysoka jakość obrazu</label><p class="small">Dostarczone filmy są wizualizacjami generatywnymi, nie nagraniami eksperymentów. Ograniczenia każdego filmu opisano przy odpowiedniej komnacie.</p></dialog>
+ <div id="sr-announcement" class="sr-only" role="status"></div>
+ <script type="module" src="app.js"></script>
+</body></html>
