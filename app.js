@@ -12,6 +12,8 @@ import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
 import {drawExperiment,explanation,formatPl} from './science.js';
 import {initMusic} from './music.js';
 import {createEntranceGates} from './gates.js';
+import {createFlagWind} from './flags.js';
+import {createEveningLighting,createLanternHalo} from './evening.js';
 import {tearSheet} from './paper.js';
 const $=id=>document.getElementById(id);
 // Without the exhibit texts nothing can start: show the failure screen instead of an endless loader.
@@ -20,6 +22,7 @@ const visited=new Set();
 let current='gate',traveling=false,activeStation=null,castle,renderer,composer,aoPass,scene,camera,ready=false,accessible=false;
 let lastTime=0,worldTime=0,frameTimes=[],lookYaw=0,lookPitch=0,lookBase=new THREE.Vector3(),move=null,lake,entranceGates;
 let reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,quality=true;
+let evening=false,eveningLighting;
 const videos=new Map(),screens=new Map(),hotspots=[],failedVideos=new Set();
 const w=(x,y,z=2)=>new THREE.Vector3(x,z,-y);
 const nodeDefs={
@@ -47,6 +50,7 @@ $('map-open').onclick=()=>dialogOpen('map-dialog');$('about-open').onclick=()=>d
 $('return-gate').onclick=()=>{ $('map-dialog').close();go('gate',true);};
 $('reduced-motion').checked=reduced;document.body.classList.toggle('calm',reduced);$('reduced-motion').onchange=e=>{reduced=e.target.checked;document.body.classList.toggle('calm',reduced);};
 $('start-journey').onclick=()=>go('arrival');
+$('time-of-day').onclick=()=>{evening=!evening;$('time-of-day').setAttribute('aria-pressed',String(evening));$('time-of-day').setAttribute('aria-label',evening?'Pora dnia: wieczór. Włącz dzień':'Pora dnia: dzień. Włącz wieczór');$('time-label').textContent=evening?'Wieczór':'Dzień';updateLights();};
 $('high-quality').onchange=e=>{quality=e.target.checked;if(renderer){renderer.setPixelRatio(quality?Math.min(devicePixelRatio,1.5):1);composer?.setPixelRatio(renderer.getPixelRatio());}};
 $('reading-toggle').onclick=()=>{const collapsed=document.body.classList.toggle('reading-collapsed');$('reading-toggle').textContent=collapsed?'Rozwiń opis':'Zwiń opis';$('reading-toggle').setAttribute('aria-expanded',String(!collapsed));};
 $('details-open').onclick=()=>{if(!activeStation)return;setText('detail-kicker',`Komnata ${String(activeStation.id).padStart(2,'0')} · za kulisami zjawiska`);setText('detail-title',activeStation.title);setText('detail-copy',activeStation.detail);$('source-list').replaceChildren(...activeStation.sources.map(([name,url])=>{const li=document.createElement('li'),a=document.createElement('a');a.textContent=name+' ↗';a.href=url;a.target='_blank';a.rel='noopener noreferrer';li.append(a);return li;}));dialogOpen('detail-dialog');};
@@ -160,7 +164,7 @@ function updateMove(now){if(!move)return;const t=Math.min(1,(now-move.start)/mov
 // Point at distance d along the walk; beyond the end it continues in the direction of the last segment.
 function pathPoint(m,d){const n=m.points.length;if(d>=m.total){const a=m.points[Math.max(0,n-2)],b=m.points[n-1],dir=b.clone().sub(a),len=dir.length();return len>1e-4?b.clone().addScaledVector(dir,(d-m.total)/len):b.clone();}let i=1;while(i<n-1&&m.distances[i]<d)i++;const f=(d-m.distances[i-1])/Math.max(.0001,m.distances[i]-m.distances[i-1]);return m.points[i-1].clone().lerp(m.points[i],f);}
 function finishTravel(){current=move.target;camera.position.copy(nodeDefs[current].p);lookBase.copy(viewTarget(current));camera.lookAt(lookBase);move=null;traveling=false;$('scene').style.opacity='1';document.body.classList.remove('cinematic');$('travel').hidden=true;updateUI();updateLights();}
-let sun,hemisphere,localLights=[];
+let sun,hemisphere,localLights=[],flagWind;
 const isOutside=key=>['gate','arrival','exit','belvedere'].includes(key);
 function updateLights(key=current){if(!renderer)return;const outside=isOutside(key),station=typeof key==='number'?stations[key-1]:null;hemisphere.intensity=outside?.9:.16;sun.intensity=outside?2.8:.22;scene.environmentIntensity=outside?.32:.2;scene.fog.density=outside?.0015:.001;renderer.toneMappingExposure=outside?1.05:1.12;if(lake)lake.visible=outside;
  const p=station?station.position:key==='hall'?[0,-34]:key==='finale'?[0,28]:[0,0];
@@ -168,6 +172,7 @@ function updateLights(key=current){if(!renderer)return;const outside=isOutside(k
  const palettes={1:['#fff1da','#bbdef8',580,250],2:['#ffdab2','#a4c2dc',490,170],3:['#d4e6ff','#8bb5df',380,260],4:['#ffe1bd','#ccd9e1',540,210],5:['#ffd29a','#aaaec1',500,150],6:['#e0edf8','#a3d8e1',500,230],7:['#e2dcff','#9bc9d1',430,210],8:['#eef5ed','#c1e3e2',580,290],9:['#e1edc3','#a4d4c4',500,240],10:['#e7d9bc','#9bb8d8',390,180]};
  const palette=palettes[key]||['#ffd49c','#b8dafa',580,250];
  localLights.forEach((l,i)=>{l.position.copy(w(...placements[i]));l.color.set(i<2?palette[i]:station?.color||'#ffd49c');l.intensity=outside?0:i===0?palette[2]:i===1?palette[3]:110;});renderer.shadowMap.needsUpdate=true;
+ eveningLighting?.apply(evening,outside);
 }
 function canvasPoster(s){const cv=document.createElement('canvas');cv.width=1280;cv.height=720;const ctx=cv.getContext('2d');ctx.fillStyle='#0b1820';ctx.fillRect(0,0,1280,720);ctx.strokeStyle='#b99d6655';ctx.strokeRect(36,36,1208,648);ctx.textAlign='center';ctx.fillStyle='#d9be8a';ctx.font='22px Georgia';ctx.fillText(`KOMNATA ${String(s.id).padStart(2,'0')}`,640,145);ctx.font='65px Georgia';ctx.fillText(s.title,640,265);ctx.fillStyle='#c4cbc7';ctx.font='26px Georgia';ctx.fillText('Ta opowieść zasługuje na precyzyjny obraz.',640,390);ctx.font='20px Arial';ctx.fillStyle='#91a4aa';ctx.fillText('Film oczekuje na poprawioną wersję.',640,457);ctx.font='19px Arial';ctx.fillText('W tym czasie odkryj przestrzenny artefakt i interakcję.',640,503);const tx=new THREE.CanvasTexture(cv);tx.colorSpace=THREE.SRGBColorSpace;return tx;}
 function addProjection(mesh,id){const s=stations[id-1],box=new THREE.Box3().setFromObject(mesh),size=new THREE.Vector3(),center=new THREE.Vector3();box.getSize(size);box.getCenter(center);let texture;
@@ -189,9 +194,11 @@ async function init(){try{
  const gltf=await new GLTFLoader().setDRACOLoader(draco).loadAsync('models/castle.glb',e=>{if(e.total){const v=Math.round(e.loaded/e.total*100);$('load-bar').style.width=v+'%';setText('load-text',`Otwieranie zamku · ${v}%`);}});
  draco.dispose();castle=gltf.scene;scene.add(castle);castle.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;if(o.name.includes('00_ENVIRONMENT')&&o.name.includes('Water'))o.visible=false;const mats=Array.isArray(o.material)?o.material:[o.material];for(const m of mats){if(m.map)m.map.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());if(m.name.includes('Slate')||m.name.includes('leaf')||m.name.includes('meadow'))m.side=THREE.DoubleSide;if(m.name.includes('Glass')){m.transmission=0;m.transparent=true;m.opacity=.25;m.depthWrite=false;m.side=THREE.DoubleSide;}}if(o.name.startsWith('Projection_')){const id=Number(o.name.split('_')[1]);addProjection(o,id);}}});
  entranceGates=createEntranceGates(castle,scene,()=>{renderer.shadowMap.needsUpdate=true;});
+ flagWind=createFlagWind(castle);
  const waterNormal=await new THREE.TextureLoader().loadAsync('models/pass2-water-normal.png');waterNormal.wrapS=waterNormal.wrapT=THREE.RepeatWrapping;
  lake=new Water(new THREE.PlaneGeometry(2400,2400),{textureWidth:768,textureHeight:768,waterNormals:waterNormal,sunDirection:new THREE.Vector3(.55,.38,.85).normalize(),sunColor:0xffe3b8,waterColor:0x234652,distortionScale:1.8,fog:true});lake.name='Reflective alpine lake';lake.rotation.x=-Math.PI/2;lake.position.y=-18.82;scene.add(lake);
  composer=new EffectComposer(renderer);composer.addPass(new RenderPass(scene,camera));aoPass=new SSAOPass(scene,camera,innerWidth,innerHeight,16);aoPass.kernelRadius=1.1;aoPass.minDistance=.0001;aoPass.maxDistance=.025;composer.addPass(aoPass);composer.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),.16,.35,.9));composer.addPass(new OutputPass());
+ eveningLighting=createEveningLighting({scene,sun,hemisphere,sky,lake,renderer,localLights,castle,haloMap:createLanternHalo()});
  ready=true;sceneStatus.loaded=true;updateLights();updateUI();renderer.render(scene,camera);$('loading').style.opacity=0;setTimeout(()=>{$('loading').hidden=true;},900);
  renderer.setAnimationLoop(animate);
  if(new URLSearchParams(location.search).has('diagnostics')){const d=document.createElement('output');d.id='diagnostics';d.style.cssText='position:absolute;right:15px;top:100px;background:#07121dcc;color:#ddd;padding:10px;font:11px monospace;z-index:15;white-space:pre';document.body.append(d);}
@@ -202,9 +209,11 @@ let lastMetrics=0;
 function animate(now){if(document.hidden){lastTime=now;return;}const dt=Math.min(.1,(now-(lastTime||now))/1000);lastTime=now;worldTime+=dt;frameTimes.push(dt);if(frameTimes.length>120)frameTimes.shift();
  if(lake&&!reduced)lake.material.uniforms.time.value+=dt*.3;
  entranceGates?.update(now,reduced);
+ flagWind?.update(worldTime,reduced);
  if(move)updateMove(now);else{
   const dir=lookBase.clone().sub(camera.position);const r=dir.length();const yaw=Math.atan2(dir.x,dir.z)+lookYaw,pitch=Math.asin(dir.y/r)+lookPitch;camera.lookAt(camera.position.clone().add(new THREE.Vector3(Math.sin(yaw)*Math.cos(pitch)*r,Math.sin(pitch)*r,Math.cos(yaw)*Math.cos(pitch)*r)));
  }
+ eveningLighting?.update(worldTime,camera);
  const box=hotspots.length?textBox():null,placed=[];
  for(const h of hotspots){const p=h.p.clone().project(camera),behind=h.p.clone().sub(camera.position).dot(camera.getWorldDirection(new THREE.Vector3()))<0;const offView=behind||Math.abs(p.x)>1;
  // A point behind the camera projects mirrored; pin it to the edge on its real side instead.

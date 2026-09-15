@@ -35,6 +35,8 @@ header { position: absolute; left: 3.2vw; right: 3.2vw; top: 22px; display: flex
 nav { display: flex; align-items: center; gap: 26px }
 nav button { display: flex; align-items: center; gap: 8px; font-size: 15px; color: #f1e6cf; padding: 6px 0 }
 nav button:hover { color: var(--brass-light) }
+#time-of-day .evening-symbol, #time-of-day[aria-pressed="true"] .day-symbol { display: none }
+#time-of-day[aria-pressed="true"] .evening-symbol { display: block }
 nav svg { width: 22px; height: 22px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 1px 4px #0009) }
 #sound .sound-icon .speaker { fill: currentColor; stroke: none }
 #sound[aria-pressed="true"] .sound-off, #sound[aria-pressed="false"] .sound-waves { display: none }
@@ -105,7 +107,7 @@ footer { position: absolute; left: 3.2vw; right: 3.2vw; bottom: 22px; display: f
   .brand span { font-size: 14px }
   nav { gap: 14px }
   nav button { font-size: 14px }
-  #about-open .nav-label, #sound .sound-label { display: none }
+  #about-open .nav-label, #sound .sound-label, #time-label { display: none }
   #gesture-hint { display: none }
   footer { left: 16px; right: 16px; bottom: 18px }
   #location-label { font-size: 12px }
@@ -114,6 +116,11 @@ footer { position: absolute; left: 3.2vw; right: 3.2vw; bottom: 22px; display: f
   .hotspot span:last-child { font-size: 12.5px }
   .hotspot .orb { width: 32px; height: 32px }
   .accessible #hotspots { bottom: auto; top: 80px; right: 16px }
+}
+@media (max-width: 420px) {
+  .brand span, #map-open .nav-label { display: none }
+  nav { gap: 8px }
+  nav button { min-width: 44px; min-height: 44px; justify-content: center }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important }
