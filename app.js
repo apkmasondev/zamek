@@ -13,6 +13,7 @@ import {drawExperiment,explanation,formatPl} from './science.js';
 import {initMusic} from './music.js';
 import {createEntranceGates} from './gates.js';
 import {createFlagWind} from './flags.js';
+import {applyStonePatina} from './patina.js';
 import {createEveningLighting,createLanternHalo} from './evening.js';
 import {tearSheet} from './paper.js';
 const $=id=>document.getElementById(id);
@@ -65,6 +66,7 @@ function renderMap(){const fp=$('floorplan');
  // SVG coordinates share the percentage layout of room buttons, at every aspect ratio.
  // Each separate arrow follows the actual tour: hall → 01 … 10 → observatory.
  const route=[
+  ['arrival','hall','M250 562V496'],
   ['hall',1,'M250 488V450H322V369H338'],
   [1,2,'M407.5 408V418'],[2,3,'M407.5 498V508'],
   [3,4,'M340 546H325V570H175V483H162'],
@@ -77,7 +79,10 @@ function renderMap(){const fp=$('floorplan');
  fp.innerHTML=`<svg viewBox="0 0 500 600" preserveAspectRatio="none" aria-hidden="true"><defs><marker id="map-direction" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M1 1L6.5 4L1 7" fill="none" stroke="#8b2f1d" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></marker><pattern id="map-hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V7" stroke="#5e4c38" stroke-width="1" opacity=".35"/></pattern></defs><rect x="191" y="264" width="118" height="144" fill="url(#map-hatch)" stroke="#2b2016" stroke-opacity=".75" vector-effect="non-scaling-stroke"/>${circle(250,378,17,'fill="#e5d6b5" stroke="#2b2016" stroke-opacity=".7" vector-effect="non-scaling-stroke"')}${circle(250,181,59,'fill="#fbf3df55" stroke="#2b2016" stroke-width="1.5" vector-effect="non-scaling-stroke"')}${circle(250,181,51,'fill="none" stroke="#2b2016" stroke-opacity=".45" stroke-dasharray="2 3" vector-effect="non-scaling-stroke"')}<path d="M250 ${181-52*k/sy}v${38*k/sy}M250 ${181+14*k/sy}v${38*k/sy}" stroke="#2b2016" stroke-opacity=".45" vector-effect="non-scaling-stroke"/><g stroke="#8b2f1d" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 5">${route.map(([from,to,d])=>`<path data-route-from="${from}" data-route-to="${to}" d="${d}" marker-end="url(#map-direction)" vector-effect="non-scaling-stroke"/>`).join('')}</g><circle cx="250" cy="488" r="3.5" fill="#8b2f1d"/><g transform="translate(${52} ${58}) scale(${k/sx} ${k/sy})" fill="none" stroke="#2b2016" stroke-width="1.2" vector-effect="non-scaling-stroke"><circle r="22" stroke-opacity=".55"/><path d="M0-30L5-5 0 0-5-5z" fill="#8b2f1d" stroke="#8b2f1d"/><path d="M0 30L5 5 0 0-5 5z" fill="#e5d6b5"/><path d="M-30 0H30" stroke-opacity=".55"/><text y="-35" text-anchor="middle" font-size="13" fill="#8b2f1d" stroke="none" font-family="Palatino Linotype, Palatino, Georgia, serif">N</text></g></svg>`;
  const pos={1:[68,55],2:[68,70],3:[68,85],4:[5,74],5:[5,57],6:[5,39],7:[5,20],8:[36.5,1],9:[68,20],10:[68,39]};
  stations.forEach(s=>{const b=document.createElement('button');b.className='map-room'+(visited.has(s.id)?' visited':'')+(current===s.id?' current':'');b.style.left=pos[s.id][0]+'%';b.style.top=pos[s.id][1]+'%';b.style.height=s.id===3?'12%':'13%';b.innerHTML=`<span>${String(s.id).padStart(2,'0')}</span><b>${s.title}</b>`;b.setAttribute('aria-label',`${s.id}. ${s.title}${visited.has(s.id)?', odkryta':''}`);b.onclick=()=>{$('map-dialog').close();go(s.id,true);};fp.append(b);});
- [['DZIEDZINIEC<br><small>HARMONII</small>',37,53],['OBSERWATORIUM',37,29],['WIELKA SALA',37,83]].forEach(([html,x,y])=>{const d=document.createElement('div');d.className='map-label';d.innerHTML=html;d.style.left=x+'%';d.style.top=y+'%';fp.append(d);});
+ // Places outside the ten rooms are also stops on the plan: they can be chosen and show where the visitor is.
+ const here=current==='belvedere'?'exit':current;
+ [['court','DZIEDZINIEC<br><small>HARMONII</small>',37,53],['finale','OBSERWATORIUM',37,29],['hall','WIELKA SALA',37,83],['arrival','PLAC PRZEDBRAMNY',30,96,40],['exit','TARAS · BELWEDER',64,0,36]].forEach(([key,html,x,y,width])=>{const d=document.createElement('button');d.className='map-label'+(here===key?' current':'');d.innerHTML=html;d.style.left=x+'%';d.style.top=y+'%';if(width)d.style.width=width+'%';d.setAttribute('aria-label',nodeDefs[key].label+(here===key?', tu jesteś':''));d.onclick=()=>{$('map-dialog').close();go(key,true);};fp.append(d);});
+ setText('map-where',`Tu jesteś: ${typeof current==='number'?`${String(current).padStart(2,'0')} · ${stations[current-1].title}`:nodeDefs[current].label}`);
  setText('map-count',`Odkryto ${visited.size} z 10 komnat`);
 }
 function updateUI(){
@@ -193,6 +198,7 @@ async function init(){try{
  const draco=new DRACOLoader().setDecoderPath('vendor/libs/draco/');
  const gltf=await new GLTFLoader().setDRACOLoader(draco).loadAsync('models/castle.glb',e=>{if(e.total){const v=Math.round(e.loaded/e.total*100);$('load-bar').style.width=v+'%';setText('load-text',`Otwieranie zamku · ${v}%`);}});
  draco.dispose();castle=gltf.scene;scene.add(castle);castle.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;if(o.name.includes('00_ENVIRONMENT')&&o.name.includes('Water'))o.visible=false;const mats=Array.isArray(o.material)?o.material:[o.material];for(const m of mats){if(m.map)m.map.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());if(m.name.includes('Slate')||m.name.includes('leaf')||m.name.includes('meadow'))m.side=THREE.DoubleSide;if(m.name.includes('Glass')){m.transmission=0;m.transparent=true;m.opacity=.25;m.depthWrite=false;m.side=THREE.DoubleSide;}}if(o.name.startsWith('Projection_')){const id=Number(o.name.split('_')[1]);addProjection(o,id);}}});
+ applyStonePatina(castle);
  entranceGates=createEntranceGates(castle,scene,()=>{renderer.shadowMap.needsUpdate=true;});
  flagWind=createFlagWind(castle);
  const waterNormal=await new THREE.TextureLoader().loadAsync('models/pass2-water-normal.png');waterNormal.wrapS=waterNormal.wrapT=THREE.RepeatWrapping;
