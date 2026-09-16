@@ -195,8 +195,11 @@ async function init(){try{
  sun=new THREE.DirectionalLight('#ffe3b8',2.4);sun.position.set(110,76,170);sun.castShadow=true;sun.shadow.mapSize.set(4096,4096);Object.assign(sun.shadow.camera,{left:-170,right:170,top:170,bottom:-170,near:1,far:450});sun.shadow.normalBias=.055;sun.shadow.bias=-.00008;scene.add(sun);
  for(let i=0;i<3;i++){const l=new THREE.PointLight(i===1?'#b8dafa':'#ffd49c',0,35,2);if(i===0){l.castShadow=true;l.shadow.mapSize.set(1024,1024);l.shadow.normalBias=.04;l.shadow.bias=-.0002;l.shadow.camera.near=.4;}scene.add(l);localLights.push(l);}
  // The model geometry is Draco-compressed at export; the decoder (WebAssembly) ships locally in vendor/libs/draco.
+ // Pages/Cloudflare send the model gzip-compressed: Content-Length is then the compressed size while progress counts
+ // unpacked bytes (it reached 109%). The published page carries the real size; locally the header is exact (content 0).
+ const modelBytes=Number(document.querySelector('meta[name="model-bytes"]')?.content)||0;
  const draco=new DRACOLoader().setDecoderPath('vendor/libs/draco/');
- const gltf=await new GLTFLoader().setDRACOLoader(draco).loadAsync('models/castle.glb',e=>{if(e.total){const v=Math.round(e.loaded/e.total*100);$('load-bar').style.width=v+'%';setText('load-text',`Otwieranie zamku · ${v}%`);}});
+ const gltf=await new GLTFLoader().setDRACOLoader(draco).loadAsync('models/castle.glb',e=>{const total=modelBytes||e.total;if(total){const v=Math.min(100,Math.round(e.loaded/total*100));$('load-bar').style.width=v+'%';setText('load-text',`Otwieranie zamku · ${v}%`);}});
  draco.dispose();castle=gltf.scene;scene.add(castle);castle.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;if(o.name.includes('00_ENVIRONMENT')&&o.name.includes('Water'))o.visible=false;const mats=Array.isArray(o.material)?o.material:[o.material];for(const m of mats){if(m.map)m.map.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());if(m.name.includes('Slate')||m.name.includes('leaf')||m.name.includes('meadow'))m.side=THREE.DoubleSide;if(m.name.includes('Glass')){m.transmission=0;m.transparent=true;m.opacity=.25;m.depthWrite=false;m.side=THREE.DoubleSide;}}if(o.name.startsWith('Projection_')){const id=Number(o.name.split('_')[1]);addProjection(o,id);}}});
  applyStonePatina(castle);
  entranceGates=createEntranceGates(castle,scene,()=>{renderer.shadowMap.needsUpdate=true;});
