@@ -1,11 +1,13 @@
 Tiling textures in this folder come from Poly Haven (https://polyhaven.com), licensed CC0 (public domain).
-Downloaded 22.09.2026 at 1K (walls: 2K), re-encoded as JPEG for the web. Names follow the Poly Haven asset ids:
+Downloaded 22.09.2026 (cobblestones, forecourt, oak: 23.09.2026) at 1K (walls: 2K), re-encoded as JPEG for the web. Names follow the Poly Haven asset ids:
   medieval_blocks_03          walls of the castle and rooms           Rob Tuytel
-  worn_rock_natural_01        grain of carved stone, forecourt        Rob Tuytel, Dimitrios Savva
+  worn_rock_natural_01        grain of carved stone                  Rob Tuytel, Dimitrios Savva
   roof_slates_02              slate roofs                            Rob Tuytel
   cliff_side                  castle rock and talus                  James Ray Cock, Jenelle van Heerden, Dario Barresi
   aerial_grass_rock           meadows and lawns (detail only)        Rob Tuytel
-  large_sandstone_blocks_01   bridge, promenade, terrace, courtyard  Rob Tuytel
+  cobblestone_floor_08        bridge, promenade, terrace, courtyard  Rob Tuytel
+  rock_surface                forecourt flags (grain and stains)     Amal Kumar
+  rough_wood                  oak of the gate leaves and benches     Rob Tuytel
   stone_brick_wall_001        bridges, piers, retaining walls        Dimitrios Savva, Rico Cilliers
   marble_01 (joints removed)  floor of the Great Hall                Rob Tuytel
   large_floor_tiles_02 (crop) floor of the galleries                 Rob Tuytel

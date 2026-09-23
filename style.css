@@ -9,6 +9,7 @@
   --brass-light: #efd9a8;
   --night: #0f171b;
   --lamp: #ffd899;
+  --paper: #e5d6b5;
 }
 * { box-sizing: border-box }
 html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: var(--night); color: #efe6d4; font-family: var(--serif) }
@@ -133,3 +134,13 @@ footer { position: absolute; left: 3.2vw; right: 3.2vw; bottom: 22px; display: f
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important }
 }
+
+/* Evening: the folio is read by candlelight. Warmer, deeper paper and ink, amber chrome, a bluer dusk vignette. */
+.dusk { --ink: #22150a; --ink-soft: #4b3723; --rubric: #7a2413; --paper: #c8ab79; --brass-light: #f3d49a }
+.dusk .vignette { background: linear-gradient(180deg, #0a0916a6, transparent 24%, transparent 66%, #08060fc4) }
+.dusk .brand span, .dusk nav button, .dusk footer { color: #f4dcae }
+.dusk .travel p { color: #f7dcaa }
+.dusk .travel-sub { color: #e9cf9f !important }
+.dusk .hotspot span:last-child { background: linear-gradient(180deg, #dfc493, #be9f69) }
+.dusk .hotspot:hover span:last-child { background: linear-gradient(180deg, #ead3a6, #cdb07c) }
+.dusk .hotspot .orb { box-shadow: 0 0 0 3px #1a120a73, 0 0 34px 8px #ffbf6a80 }

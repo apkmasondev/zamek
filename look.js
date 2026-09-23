@@ -42,7 +42,9 @@ export const TEXTURE_SETS = {
   roof: {files: ['roof_slates_02_color', 'roof_slates_02_normal', 'roof_slates_02_arm'], scale: 2.4},
   rock: {files: ['cliff_side_color', 'cliff_side_normal', 'cliff_side_arm'], scale: 7},
   grass: {files: ['aerial_grass_rock_color', 'aerial_grass_rock_normal', 'aerial_grass_rock_arm'], scale: 9, lum: .121},
-  paving: {files: ['large_sandstone_blocks_01_color', 'large_sandstone_blocks_01_normal', 'large_sandstone_blocks_01_arm'], scale: 3},
+  paving: {files: ['cobblestone_floor_08_color', 'cobblestone_floor_08_normal', 'cobblestone_floor_08_arm'], scale: 2.3, lum: .277},
+  forecourt: {files: ['rock_surface_color', 'rock_surface_normal', 'rock_surface_arm'], scale: 2.6, lum: .126},
+  oak: {files: ['rough_wood_color', 'rough_wood_normal', 'rough_wood_arm'], scale: .9, lum: .13},
   hallFloor: {files: ['marble_01_stone_color', 'marble_01_stone_normal', 'marble_01_stone_arm'], scale: 2.3, lum: .349},
   galleryFloor: {files: ['large_floor_tiles_02_stone_color', 'large_floor_tiles_02_stone_normal', 'large_floor_tiles_02_stone_arm'], scale: 1.7, lum: .19},
   mountain: {files: ['aerial_rocks_02_color', 'aerial_rocks_02_normal', null], scale: 90, lum: .120},
@@ -96,10 +98,11 @@ function triplanar(set, {tint = [1, 1, 1], normalStrength = 1, sides = 0, detail
     head: TRI_HEAD, color: TRI_COLOR(!!set.color, !!set.arm, detail, aoOnly), normal: set.normal ? TRI_NORMAL : ''
   };
 }
-const WALL_HEAD = `uniform sampler2D tpColor2;uniform sampler2D tpNormal2;uniform sampler2D tpArm2;uniform float tpScale2;uniform vec3 tpTint2;
 // Castle footprint in three.js coordinates (Blender y = -z); the gate zone ends before the first span of the bridge.
-float lkBridge(vec3 p){float ax=abs(p.x);float inside=step(ax,38.5)*step(p.z,mix(54.6,51.6,step(ax,12.)))*step(-90.5,p.z);return 1.-inside;}
+const FOOTPRINT = `float lkBridge(vec3 p){float ax=abs(p.x);float inside=step(ax,38.5)*step(p.z,mix(54.6,51.6,step(ax,12.)))*step(-90.5,p.z);return 1.-inside;}
 `;
+const WALL_HEAD = `uniform sampler2D tpColor2;uniform sampler2D tpNormal2;uniform sampler2D tpArm2;uniform float tpScale2;uniform vec3 tpTint2;
+` + FOOTPRINT;
 const WALL_COLOR = `
 float lkBr=lkBridge(lkPos);vec3 tpW=tpWeights(lkNrm);vec3 tpCol,tpArmV;
 if(lkBr>.5){vec3 q=lkPos/tpScale2;tpCol=tpSample(tpColor2,q,tpW).rgb;tpCol=mix(tpCol,vec3(dot(tpCol,vec3(.3,.55,.15))),.85)*tpTint2;tpArmV=tpSample(tpArm2,q,tpW).rgb;}
@@ -117,6 +120,68 @@ const WALL_NORMAL = `
 if(dot(lkNrm,lkNrm)>1e-6){vec3 n=normalize(lkNrm);vec3 w=tpWeights(n);float k=tpNormalStrength*mix(.25,1.,tpFade());
  vec3 nw=lkBridge(lkPos)>.5?tpWorldNormal(tpNormal2,lkPos/tpScale2,n,w,k):tpWorldNormalOffset(tpNormal,lkPos/tpScale,n,w,k);
  if(dot(nw,nw)>1e-8)normal=normalize((viewMatrix*vec4(normalize(nw)*faceDirection,0.)).xyz);}
+`;
+// Cobbles of the bridge, promenade and terrace. Anti-tiling as on the walls: the photo's patch-scale tones are divided out
+// (blurred mip), then slow world-space drifts of warm and cool stone take their place; worn tops are a little smoother.
+const COBBLE_COLOR = `
+vec3 tpW=tpWeights(lkNrm);vec3 q=lkPos/tpScale;
+vec3 c=tpSampleOffset(tpColor,q,tpW,0.).rgb,cb=tpSampleOffset(tpColor,q,tpW,6.5).rgb;
+c=mix(c,c/max(cb,vec3(.004))*vec3(.302,.275,.231),.75);
+c*=mix(vec3(.93,.96,1.02),vec3(1.07,1.,.9),lkFbm(lkPos*.07))*(.86+.28*lkFbm(lkPos*.45+5.));
+vec3 tpArmV=tpSampleOffset(tpArm,q,tpW,0.).rgb;
+diffuseColor.rgb=mix(c,vec3(dot(c,vec3(.3,.55,.15))),tpDesat)*tpTint*mix(1.,tpArmV.r,.7);
+lkRough=clamp(tpArmV.g+.04,0.,1.);
+`;
+// Forecourt flags: the model lays the slabs (joints and four slab tones); the jointless rock photo adds pores, stains and
+// hue within each slab. The line walked from the bridge to the lodge is a little lighter and smoother; damp patches drift across.
+const FORECOURT = `
+vec3 tpW=tpWeights(lkNrm);vec3 q=lkPos/tpScale;
+vec3 c=tpSampleOffset(tpColor,q,tpW,0.).rgb,cb=tpSampleOffset(tpColor,q,tpW,6.5).rgb;
+vec3 r=mix(c/vec3(.16,.119,.084),c/max(cb,vec3(.004)),.5);r=mix(vec3(dot(r,vec3(.3,.55,.15))),r,.8);
+float walk=(1.-smoothstep(1.,3.8,abs(lkPos.x)))*step(.9,lkNrm.y);
+float damp=smoothstep(.52,.76,lkFbm(lkPos*.11+2.));
+vec3 tpArmV=tpSampleOffset(tpArm,q,tpW,0.).rgb;
+diffuseColor.rgb*=clamp(r,.3,2.2)*tpTint*(1.+.08*walk)*(1.-.2*damp)*mix(1.,tpArmV.r,.6);
+lkRough=clamp(.78+.3*(tpArmV.g-.5)-.12*walk-.08*damp,0.,1.);
+`;
+// Old oak of the gate leaves and benches: each 0.5 m board takes its own stretch of the grain photo and its own tone.
+// Projected in object space (the gate leaves swing open; the grain must stay on the boards), normals brought back to world.
+const OAK_HEAD = 'varying vec3 lkObj;varying vec3 lkObjN;varying vec3 lkM0;varying vec3 lkM1;varying vec3 lkM2;';
+const OAK_VERTEX = 'lkObj=transformed;lkObjN=objectNormal;lkM0=modelMatrix[0].xyz;lkM1=modelMatrix[1].xyz;lkM2=modelMatrix[2].xyz;';
+const OAK_Q = `float lkBoard=lkHash(vec3(floor(lkObj.x*2.),floor(lkObj.z*2.),7.));vec3 lkOq=lkObj/tpScale*vec3(1.,.34,1.)+vec3(5.3,7.1,3.7)*lkBoard;`;
+const OAK = OAK_Q + `
+vec3 tpW=tpWeights(normalize(lkObjN));vec3 c=tpSample(tpColor,lkOq,tpW).rgb;c=vec3(dot(c,vec3(.3,.55,.15)));
+vec3 tpArmV=tpSample(tpArm,lkOq,tpW).rgb;
+float lkDamp=(1.-smoothstep(.1,1.6,lkObj.y))*step(-.3,lkObj.y);
+diffuseColor.rgb*=pow(c/.128,vec3(1.8))*tpTint*(.75+.4*lkBoard)*(1.-.35*lkDamp)*mix(1.,tpArmV.r,.8);lkRough=clamp(.55+.45*tpArmV.g,0.,1.);
+`;
+const OAK_NORMAL = `
+if(dot(lkObjN,lkObjN)>1e-6){${OAK_Q}vec3 n=normalize(lkObjN);vec3 w=tpWeights(n);
+ vec3 nw=mat3(lkM0,lkM1,lkM2)*tpWorldNormal(tpNormal,lkOq,n,w,tpNormalStrength*mix(.25,1.,tpFade()));
+ if(dot(nw,nw)>1e-8)normal=normalize((viewMatrix*vec4(normalize(nw)*faceDirection,0.)).xyz);}
+`;
+// Stone outside the castle (balustrades, piers, lodge trims): rain streaks on the sides, grime at the foot and under
+// the cap, lichen and dark spots on the tops. Inside the footprint the carved stone stays clean.
+const WEATHERED = `
+if(lkBridge(lkPos)>.5){
+ float side=1.-smoothstep(.35,.75,abs(lkNrm.y));
+ float streak=side*smoothstep(.5,.85,lkNoise(vec3(lkPos.x*7.,lkPos.y*.8,lkPos.z*7.)))*(.6+.4*lkNoise(lkPos*.5));
+ float low=(1.-smoothstep(.05,.6,lkPos.y))*step(-.4,lkPos.y);
+ float under=1.-smoothstep(-.6,-.15,lkNrm.y);
+ float dirt=clamp(streak*.45+low*.4+under*.35,0.,.7);
+ diffuseColor.rgb*=mix(vec3(.9,.88,.85)*(.88+.24*lkFbm(lkPos*1.3)),vec3(.5,.49,.44),dirt);
+ float top=smoothstep(.55,.85,lkNrm.y);
+ float lich=top*smoothstep(.58,.72,lkFbm(lkPos*2.6+9.));
+ diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.3,.31,.2)*(.7+.6*lkNoise(lkPos*20.)),lich*.55);
+ diffuseColor.rgb*=1.-smoothstep(.78,.86,lkNoise(lkPos*11.))*(.4+.6*top+.3*side)*.3;
+ lkRoughOff+=dirt*.1+lich*.1;}
+`;
+// Bark of the trees: vertical fissures and ridges, lighter weathered plates, a green tinge of algae low on the trunk.
+const BARK = `
+float lkFis=lkNoise(vec3(lkPos.x*11.,lkPos.y*1.4,lkPos.z*11.));float lkPl=lkFbm(lkPos*vec3(5.,1.1,5.));
+diffuseColor.rgb*=(.55+.6*smoothstep(.28,.7,lkFis))*(.8+.4*lkPl);
+float lkAlg=(1.-smoothstep(.2,1.4,lkPos.y))*smoothstep(.45,.7,lkFbm(lkPos*2.3));
+diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.05,.07,.03),lkAlg*.5);lkRoughOff=.12;
 `;
 function strip(m) { m.map = null; m.normalMap = null; m.roughnessMap = null; m.aoMap = null; m.color.setRGB(1, 1, 1); return m; }
 
@@ -180,23 +245,30 @@ if(lkFloor>.5){
  diffuseColor.rgb=vec3(.021,.022,.025)*(.75+.5*cl);
  lkRough=.36+.12*cl;lkMetal=0.;
 }`;
-// Vaults painted as a night sky with gilded stars: a historical motif (Sainte-Chapelle, Scrovegni) that suits a castle of discovery.
+// Painted starry vault after Sainte-Chapelle and the Scrovegni chapel: azurite blue brushed on lime plaster (mottled,
+// fine grain, hairline craquelure, soot towards the springing), gilded eight-point stars laid out as painters did, on a
+// staggered lattice, with worn leaf where the gold has flaked.
 const VAULT = `
 float lkStar=0.;
 if(lkNrm.y<.35){
  vec3 an=abs(lkNrm);
  vec2 uv=an.y>max(an.x,an.z)?lkPos.xz:(an.x>an.z?lkPos.zy:lkPos.xy);
- uv/=.95;vec2 cell=floor(uv),f=fract(uv);
- float h=lkHash(vec3(cell,7.));
- if(h>.42){vec2 c=vec2(lkHash(vec3(cell,1.)),lkHash(vec3(cell,2.)))*.56+.22;vec2 d=f-c;float r=.07+.09*lkHash(vec3(cell,5.));float dist=length(d);
-  float core=1.-smoothstep(r*.28,r*.46,dist);
-  vec2 e=vec2(abs(d.x+d.y),abs(d.x-d.y))*.7071;
-  float rays=(1.-smoothstep(0.,r*.07,min(abs(d.x),abs(d.y))))*(1.-smoothstep(r*.15,r,dist));
-  float rays2=(1.-smoothstep(0.,r*.06,min(e.x,e.y)))*(1.-smoothstep(r*.1,r*.62,dist));
-  lkStar=clamp(core+rays+rays2*.8,0.,1.);}
- vec3 blue=vec3(.012,.024,.075)*(.75+.5*lkFbm(lkPos*.35));
- diffuseColor.rgb=mix(blue,vec3(.80,.55,.22),lkStar);
- lkRough=mix(.82,.32,lkStar);lkMetal=mix(0.,.85,lkStar);
+ vec2 g=uv/.92;g.x+=.5*mod(floor(g.y),2.);vec2 cell=floor(g),d=(fract(g)-.5)*.92;
+ float sq=max(abs(d.x),abs(d.y)),dm=max(abs(d.x+d.y),abs(d.x-d.y))*.7071,sd=min(sq,dm);
+ float w=fwidth(sd)*1.2+1e-4,s=.072;
+ lkStar=1.-smoothstep(s-w,s+w,sd);
+ float flake=smoothstep(.62,.8,lkNoise(lkPos*22.+cell.xyx))*.85;
+ lkStar*=1.-flake*step(.55,lkHash(vec3(cell,3.)));
+ float boss=1.-smoothstep(.014-w,.014+w,length(d));
+ float brush=lkNoise(vec3(uv.x*1.3+uv.y*.4,uv.y*5.,uv.x*.7))*.5+lkFbm(lkPos*.55)*.8;
+ vec3 blue=vec3(.011,.021,.068)*(.62+.55*brush)*(.9+.2*lkNoise(lkPos*9.));
+ float crack=1.-smoothstep(.0,.018,abs(lkNoise(lkPos*3.1)-.5))*.35;
+ float soot=smoothstep(.5,.82,lkFbm(lkPos*.21+4.))*.3;
+ blue*=crack*(1.-soot);
+ vec3 gold=vec3(.78,.53,.2)*(.72+.4*lkNoise(lkPos*30.))*(1.-.35*boss);
+ diffuseColor.rgb=mix(blue,gold,lkStar);
+ lkRough=mix(.88,.34,lkStar);lkMetal=mix(0.,.9,lkStar);
+ lkStar*=.8;
 }`;
 const VAULT_EMISSIVE = `totalEmissiveRadiance+=vec3(1.,.66,.28)*lkStar*lkStarGlow;`;
 // Leaded glazing in lozenge quarries. From inside the panes carry daylight; outside they read as dark glass.
@@ -313,7 +385,7 @@ lkRough=mix(.95,.38,gold);lkMetal=mix(0.,.8,gold);
 
 // Without the photographs (offline copy, blocked download) the dressed materials keep colours close to them, not the pale export averages.
 const FALLBACK = {'Limestone · warm honed blocks': [.2, .15, .1], 'P2 · weathered limestone': [.14, .12, .1], 'Slate · blue grey': [.045, .055, .07],
-  'Silhouette · fractured limestone': [.13, .12, .11], 'P2 · warm sandstone paving': [.28, .23, .16]};
+  'Silhouette · fractured limestone': [.13, .12, .11], 'P2 · warm sandstone paving': [.24, .22, .19]};
 export function dressSurfaces(castle, renderer, tex = null) {
   const done = new Map();
   const upgrade = source => {
@@ -328,7 +400,8 @@ export function dressSurfaces(castle, renderer, tex = null) {
       Object.assign(t.uniforms, {tpColor2: {value: tex.bridge.color}, tpNormal2: {value: tex.bridge.normal}, tpArm2: {value: tex.bridge.arm}, tpScale2: {value: tex.bridge.scale}, tpTint2: {value: new THREE.Vector3(2.05, 2.1, 2.3)}});
       extend(n, 'lk-wall-bridge-photo', {uniforms: t.uniforms, head: t.head + WALL_HEAD + PATINA_HEAD, color: WALL_COLOR + STONE + PATINA, normal: WALL_NORMAL});
     }
-    else if (tex && name === 'Limestone · carved edges') { const t = triplanar(tex.trim, {normalStrength: .24}); n = m.clone(); n.normalMap = null; extend(n, 'lk-trim-photo', {uniforms: t.uniforms, head: t.head + PATINA_HEAD, color: STONE + PATINA + t.color, normal: t.normal}); }
+    else if (tex && name === 'Limestone · carved edges') { const t = triplanar(tex.trim, {normalStrength: .24}); n = m.clone(); n.normalMap = null; extend(n, 'lk-trim-photo', {uniforms: t.uniforms, head: t.head + PATINA_HEAD + FOOTPRINT, color: STONE + PATINA + WEATHERED + t.color, normal: t.normal}); }
+    else if (tex && name === 'Oak · smoked') { const t = triplanar(tex.oak, {tint: [.62, .6, .6], normalStrength: 1.2}); n = m.clone(); n.map = n.normalMap = n.roughnessMap = null; n.userData.lkPhoto = true; extend(n, 'lk-oak-photo', {uniforms: t.uniforms, head: t.head + OAK_HEAD, vertexHead: OAK_HEAD, vertex: OAK_VERTEX, color: OAK, normal: OAK_NORMAL}); }
     else if (tex && (name.startsWith('Final · hall limestone') || name.startsWith('Gallery · honed grey limestone'))) {
       // Each of the model's slab tones keeps its relative brightness; the stone itself comes from the photo.
       const hall = name.startsWith('Final'), k = (m.color.r * .3 + m.color.g * .55 + m.color.b * .15) / (hall ? .245 : .222);
@@ -338,11 +411,12 @@ export function dressSurfaces(castle, renderer, tex = null) {
     else if (tex && name === 'P2 · weathered limestone') photo(tex.wall, {tint: [.8, .78, .72]}, 'lk-wall-photo-dark', PATINA_HEAD, STONE);
     else if (tex && name === 'Slate · blue grey') photo(tex.roof, {tint: [.3, .35, .44], normalStrength: 1.2, sides: 1, desat: .65}, 'lk-roof-photo', '', SLATE);
     else if (tex && name === 'Silhouette · fractured limestone') photo(tex.rock, {tint: [.92, .9, .86], normalStrength: 1.3, desat: .72}, 'lk-rock-photo', '', ROCK_PHOTO);
-    else if (tex && name.startsWith('P2 · warm sandstone paving')) photo(tex.paving, {tint: [1, .97, .9], normalStrength: 1}, 'lk-paving-photo', '', PAVING_TONE);
+    else if (tex && name.startsWith('P2 · warm sandstone paving')) { const t = triplanar(tex.paving, {tint: [.8, .74, .67], normalStrength: 1.15, desat: .2}); n = strip(m.clone()); extend(n, 'lk-cobble-photo', {uniforms: t.uniforms, head: t.head, color: COBBLE_COLOR, normal: t.normal}); }
     else if (tex && name === 'Lake · meadow and weathered shore') { const t = triplanar(tex.grass, {normalStrength: .8, detail: true, aoOnly: true}); n = m.clone(); n.normalMap = null; extend(n, 'lk-meadow-photo', {uniforms: t.uniforms, head: t.head, color: t.color + MEADOW, normal: t.normal}); }
     else if (tex && name === 'P2 · garden earth') { const t = triplanar({...tex.grass, scale: 6}, {normalStrength: .8, detail: true, aoOnly: true}); n = m.clone(); n.color.setRGB(.075, .11, .035); n.normalMap = null; extend(n, 'lk-earth-grass', {uniforms: t.uniforms, head: t.head, color: t.color + MEADOW, normal: t.normal}); }
     else if (tex && name === 'P2 · mountain meadow') { const t = triplanar({...tex.grass, scale: 6}, {normalStrength: .8, detail: true, aoOnly: true}); n = m.clone(); n.normalMap = null; extend(n, 'lk-lawn-photo', {uniforms: t.uniforms, head: t.head, color: t.color + MEADOW, normal: t.normal}); }
     else if (name === 'Limestone · warm honed blocks' || name === 'Limestone · carved edges') { n = m.clone(); extend(n, 'lk-stone', {head: PATINA_HEAD, color: STONE + PATINA}); }
+    else if (name === 'P2 · textured bark') { n = m.clone(); extend(n, 'lk-bark', {color: BARK}); }
     else if (name.startsWith('Brass · ')) { n = m.clone(); extend(n, 'lk-brass', {color: BRASS}); }
     else if (name === 'Basalt · satin floor') { n = m.clone(); extend(n, 'lk-floor', {color: FLOOR}); }
     else if (name === 'P2 · lime plaster vault') { n = m.clone(); n.side = THREE.DoubleSide; extend(n, 'lk-vault', {uniforms, head: 'uniform float lkStarGlow;', color: VAULT, emissive: VAULT_EMISSIVE}); }
@@ -356,7 +430,8 @@ export function dressSurfaces(castle, renderer, tex = null) {
     else if (name === 'Slate · blue grey') { n = m.clone(); extend(n, 'lk-slate', {color: SLATE}); }
     else if (name.startsWith('P2 · warm sandstone paving')) { n = m.clone(); extend(n, 'lk-paving', {color: PAVING}); }
     // The forecourt stones are laid radially in the model itself: only colour drift, no extra joints.
-    else if (tex && name.startsWith('Final · radial paving')) { const t = triplanar(tex.trim, {normalStrength: .7}); n = m.clone(); extend(n, 'lk-radial-photo', {uniforms: t.uniforms, head: t.head, color: PAVING_TONE + t.color, normal: t.normal}); }
+    // The four slab tones of the model differ by only 3 %; spread them so the flags read as separate stones.
+    else if (tex && name.startsWith('Final · radial paving')) { const t = triplanar(tex.forecourt, {tint: [.8, .7, .6], normalStrength: .9}); n = m.clone(); n.color.multiplyScalar([.86, 1.07, .94, 1.13][+name.slice(-1)] || 1); extend(n, 'lk-radial-photo', {uniforms: t.uniforms, head: t.head, color: FORECOURT, normal: t.normal}); }
     else if (name.startsWith('Final · radial paving')) { n = m.clone(); extend(n, 'lk-radial', {color: PAVING_TONE}); }
     if (n !== m) n.name = n.name || name;
     done.set(source, n);
@@ -372,7 +447,8 @@ export function dressSurfaces(castle, renderer, tex = null) {
     o.geometry.dispose(); o.geometry = merged;
   });
   castle.traverse(o => {
-    if (!o.isMesh || !o.name.startsWith('15_ARCHITECTURAL_REFINEMENT') || !o.name.includes('banners') || Array.isArray(o.material)) return;
+    // Only the cloth banners: the leaded window panes share the word 'banners' in their material name and must stay glass.
+    if (!o.isMesh || Array.isArray(o.material) || !o.name.startsWith('15_ARCHITECTURAL_REFINEMENT') || !o.material.name.startsWith('Cloth ·')) return;
     bannerCoordinates(o.geometry);
     const m = o.material.clone(); m.side = THREE.DoubleSide;
     extend(m, 'lk-banner', {head: BANNER_HEAD, color: BANNER, vertex: 'vBan=bannerUv;vBanSize=bannerSize;', vertexHead: 'attribute vec2 bannerUv;attribute vec2 bannerSize;' + BANNER_HEAD});

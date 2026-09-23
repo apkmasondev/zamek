@@ -37,7 +37,8 @@ function dressGateMaterials(meshes) {
   const replacement = source => {
     if (cache.has(source)) return cache.get(source);
     let m = source;
-    if (source.name.includes('Oak')) m = oakMaterial(source);
+    // With the photographs loaded, look.js already dressed the oak (object-space grain that swings with the leaf).
+    if (source.name.includes('Oak')) m = source.userData.lkPhoto ? source : oakMaterial(source);
     else if (source.name.includes('bronze')) { m = source.clone(); m.name = 'Gate · forged iron'; m.color.setRGB(.03, .028, .026); m.metalness = .6; m.roughness = .58; }
     else if (source.name.includes('Brass')) { m = source.clone(); m.name = 'Gate · aged brass'; m.color.setRGB(.3, .19, .075); m.metalness = .85; m.roughness = .48; }
     cache.set(source, m);

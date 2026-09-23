@@ -121,7 +121,7 @@ kbd { font: inherit; font-size: 14px; padding: 0 6px; border: 1px solid #5e4c38a
 .map-heading p { font-size: 16px }
 .map-legend { list-style: none; margin: 16px 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 15px }
 .map-legend i { display: inline-block; vertical-align: -3px; width: 16px; height: 16px; margin-right: 10px; border: 1.5px solid var(--ink) }
-.map-legend .lg-current { border-color: var(--rubric); box-shadow: inset 0 0 0 3px #e5d6b5, inset 0 0 0 9px var(--rubric) }
+.map-legend .lg-current { border-color: var(--rubric); box-shadow: inset 0 0 0 3px var(--paper), inset 0 0 0 9px var(--rubric) }
 .map-legend .lg-visited { position: relative }
 .map-legend .lg-visited::after { content: "✓"; position: absolute; inset: -3px 0 0 2px; font-size: 14px; color: var(--rubric); font-style: normal }
 .map-count { margin: 18px 0 10px !important; font-size: 19px !important; font-style: italic; color: var(--rubric) !important }
@@ -134,7 +134,7 @@ kbd { font: inherit; font-size: 14px; padding: 0 6px; border: 1px solid #5e4c38a
 .map-room:hover { background: #fbf3dfa6 }
 .map-room.visited::after { content: "✓"; position: absolute; top: 3px; right: 7px; font-size: 16px; color: var(--rubric) }
 .map-room.current { border: 2.5px solid var(--rubric); background: #fbf3df8c }
-.map-room.current::before { content: "tu jesteś"; position: absolute; bottom: -1px; left: 50%; transform: translate(-50%, 55%); padding: 0 6px; font-size: 13px; font-style: italic; color: var(--rubric); background: #e5d6b5 }
+.map-room.current::before { content: "tu jesteś"; position: absolute; bottom: -1px; left: 50%; transform: translate(-50%, 55%); padding: 0 6px; font-size: 13px; font-style: italic; color: var(--rubric); background: var(--paper) }
 .map-label { position: absolute; width: 26%; text-align: center; font-size: 13px; font-variant-caps: all-small-caps; letter-spacing: .05em; color: var(--ink-soft); pointer-events: none; line-height: 1.3 }
 .map-label small { display: block; font-size: 13px }
 button.map-label { pointer-events: auto; padding: 3px 0; border: 0; background: none; cursor: pointer }
@@ -215,3 +215,20 @@ button.map-label:hover { color: var(--rubric) }
 }
 @media (prefers-reduced-motion: reduce) { .film-caption { animation: none } }
 @media (hover: none) { .film-caption kbd { display: none } }
+
+/* Evening folio (body.dusk, set with the time of day): candlelight from the upper left over darker, older paper. */
+.dusk .sheet-rim { background: #e2c893 }
+.dusk .sheet { background-color: #c8ab79;
+  background-image:
+    radial-gradient(ellipse at 16% 10%, #ffd9924d, transparent 58%),
+    radial-gradient(circle at 14% 86%, #6b3f1433, transparent 22%),
+    radial-gradient(circle at 88% 12%, #6b3f1426, transparent 16%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .19 0 0 0 0 .08 0 0 0 .24 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    linear-gradient(165deg, #dcc08c, #b8975f 70%, #a8864f);
+  box-shadow: inset 0 0 80px #5a340f66, inset 0 0 16px #5a340f40 }
+.dusk .sheet ::selection { background: #7a241340 }
+.dusk .folio-button { background: #2c1d10 }
+.dusk .folio-button:hover { background: #4f2413 }
+.dusk kbd, .dusk .setting input { background: #d8bf8e }
+.dusk .map-room { background: #f3e2bb33 }
+.dusk .map-room:hover { background: #f3e2bb80 }

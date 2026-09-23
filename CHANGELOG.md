@@ -1,5 +1,37 @@
 # Zmiany
 
+## 2.1 — wrzesień 2026
+
+### Filmy
+- Nowe filmy w ośmiu komnatach, w duchu filmu „Czas”: kilka prostych, rzeczywistych zjawisk zamiast jednej animacji.
+  - **Światło:** snop słońca w ciemnej komnacie, widmo za szklanym pryzmatem, tęcza nad doliną.
+  - **Grawitacja:** spadające jabłko, kamień spadający po łuku i Ziemia widziana z orbity.
+  - **Ruch:** kamień curlingowy, bila i kula kręglowa przekazują ruch innym ciałom.
+  - **Energia:** woda obraca koło młyńskie, ogień grzeje czajnik, maszyna parowa zamienia ciepło w ruch.
+  - **Elektryczność:** wyładowanie w chmurze burzowej, linia przesyłowa nad doliną, rozgrzewające się włókno żarówki.
+  - **Magnetyzm:** opiłki żelaza w polu magnesu, igła kompasu, zorza polarna.
+  - **Materia:** ta sama woda jako lód, wrzątek i szron.
+  - **Informacja i AI:** biblioteka, dalekopis piszący znak po znaku i serwerownia — bez udawanych napisów i procentów.
+- Nowe podpisy tych filmów na kartach komnat.
+
+### Zamek i otoczenie
+- Most, promenada, taras i Dziedziniec Harmonii wyłożone starą kamienną kostką zamiast gładkich płyt.
+- Plac przedbramny z kamiennych płyt o różnych odcieniach, z porami, przebarwieniami i wydeptaną drogą od mostu.
+- Wrota Wielkiej Sali i ławy ze starego, spękanego dębu; faktura trzyma się desek także przy otwieraniu wrót.
+- Balustrady i kamień poza zamkiem ze śladami czasu: zacieki, ciemniejszy dół, porosty na daszkach słupków.
+- Nowe drzewa: rozgałęziony pień, konary i korona z kęp liści zamiast kulistych koron; kora ze spękaniami. Mniej drzew w gęstych skupiskach na wzgórzach, więcej na trawnikach wyspy.
+- Rabaty na tarasie i dziedzińcu obsadzone bukszpanem i kwitnącą lawendą.
+- Trawa przewieszona nad krawędzią skały i bluszcz spływający po urwisku; trzciny i kamyki na brzegu jeziora.
+- Okna elewacji od strony mostu znów są szkłem ołowianym i wieczorem świecą; wcześniej omyłkowo wyglądały jak chorągiewki.
+
+### Komnaty
+- Sklepienia malowane jak średniowieczne sklepienia gwiaździste: błękit kładziony pędzlem na tynku, złocone gwiazdy ośmioramienne w regularnym układzie, miejscami przetarte.
+- Usunięte czarne pasy na sklepieniach: strop nad sklepieniem nie przebija już grzbietu, a pas między sklepieniem a ścianami zamyka malowany strop z kamiennym gzymsem.
+- Tablice przy wejściach do komnat obniżone, żeby mieściły się w całości pod gzymsem.
+
+### Interfejs
+- Wieczorem karty wyglądają jak papier czytany przy świecy; ciepłe barwy napisów i znaczników, ciemniejsza winieta.
+
 ## 2.0 — wrzesień 2026
 
 Druga odsłona zamku: nowe światło, fotograficzne materiały, pełniejsza architektura i otoczenie, filmy w centrum ekspozycji, finał podsumowujący drogę. Trasa, teksty wystawy, źródła, doświadczenia (ich modele liczbowe) i wszystkie filmy pozostały te same. Poprzednią wersję można pobrać jako [1.0](https://github.com/apkmasondev/zamek/releases/tag/v1.0).

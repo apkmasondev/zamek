@@ -4,7 +4,7 @@ Interaktywna podróż 3D po zamku-muzeum nad górskim jeziorem. Dziesięć komna
 
 **Zwiedzaj:** https://apkmason.dev/zamek/
 
-Wersja 2.0 — zmiany opisuje [CHANGELOG.md](CHANGELOG.md). Poprzednią wersję (1.0) można pobrać z zakładki [Releases](https://github.com/apkmasondev/zamek/releases/tag/v1.0).
+Wersja 2.1 — zmiany opisuje [CHANGELOG.md](CHANGELOG.md). Poprzednią wersję (1.0) można pobrać z zakładki [Releases](https://github.com/apkmasondev/zamek/releases/tag/v1.0).
 
 ## Co znajdziesz w środku
 
@@ -12,7 +12,7 @@ Wersja 2.0 — zmiany opisuje [CHANGELOG.md](CHANGELOG.md). Poprzednią wersję 
 - **W każdej komnacie:** przestrzenny artefakt, film ilustracyjny, karta z opisem, interaktywne doświadczenie z suwakiem oraz źródła.
 - **Tryb filmu:** „Obejrzyj film” na karcie albo kliknięcie ekranu w komnacie — sala przygasa jak w kinie, a film wypełnia widok.
 - **Finał:** w Obserwatorium sfera armilarna zapala medalion każdej odwiedzonej komnaty.
-- Plan zamku do przechodzenia między miejscami, pora dnia (dzień lub wieczór), opcjonalna muzyka „Castello della Scienza” i tryb czytania wystawy bez 3D.
+- Plan zamku do przechodzenia między miejscami, pora dnia (dzień lub wieczór — wtedy także karty jak papier przy świecy), opcjonalna muzyka „Castello della Scienza” i tryb czytania wystawy bez 3D.
 
 ## Sterowanie
 
@@ -23,7 +23,7 @@ Wersja 2.0 — zmiany opisuje [CHANGELOG.md](CHANGELOG.md). Poprzednią wersję 
 
 ## Wymagania
 
-Aktualna przeglądarka z WebGL 2 i WebAssembly (Chrome, Edge, Firefox lub Safari) na komputerze lub telefonie. Pierwsze wczytanie pobiera około 26 MB (model 3D, faktury i biblioteki). Filmy pobierają się dopiero w odwiedzanych komnatach, a muzyka — po jej włączeniu.
+Aktualna przeglądarka z WebGL 2 i WebAssembly (Chrome, Edge, Firefox lub Safari) na komputerze lub telefonie. Pierwsze wczytanie pobiera około 29 MB (model 3D, faktury i biblioteki). Filmy pobierają się dopiero w odwiedzanych komnatach, a muzyka — po jej włączeniu.
 
 ## Uruchomienie lokalne
 
@@ -49,7 +49,7 @@ Repozytorium zawiera wyłącznie pliki potrzebne do działania strony:
 | `evening.js`, `lanterns.js`, `gates.js`, `flags.js`, `music.js`, `paper.js` | wieczór, wrota, chorągwie, muzyka, papierowe karty |
 | `stations.json` | treści komnat i źródła |
 | `models/` | model zamku (glTF z kompresją Draco) i tekstura wody |
-| `textures/` | fotograficzne faktury kamienia, łupku, skał i traw (JPEG), autorzy w `textures/CREDITS.txt` |
+| `textures/` | fotograficzne faktury kamienia, bruku, drewna, łupku, skał i traw (JPEG), autorzy w `textures/CREDITS.txt` |
 | `media/` | filmy komnat (H.264, bez dźwięku) |
 | `audio/` | muzyka (Opus i AAC) |
 | `vendor/` | używane moduły three.js i dekoder Draco |

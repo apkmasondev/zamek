@@ -26,7 +26,7 @@
     ],
     "video": "01-swiatlo",
     "videoStatus": "illustration",
-    "videoNote": "Artystyczna wizualizacja dyspersji. Powielone pasma barw i rozbłyski nie odwzorowują dokładnego toru promieni.",
+    "videoNote": "Artystyczne ujęcia światła: snop słońca w ciemnej komnacie, białe światło rozszczepione przez szklany pryzmat na jedno widmo i tęcza nad doliną po deszczu. Obraz jest poglądowy, nie jest pomiarem widma.",
     "interaction": "Rozsuń widmo",
     "control": "Rozszczepienie",
     "unit": "",
@@ -34,7 +34,7 @@
     "max": 100,
     "value": 70,
     "acceptedBy": "user",
-    "acceptedOn": "2026-09-13"
+    "acceptedOn": "2026-09-23"
   },
   {
     "id": 2,
@@ -108,13 +108,15 @@
     ],
     "video": "03-grawitacja",
     "videoStatus": "illustration",
-    "videoNote": "Siatka jest analogią; rozmiary i odległości Ziemi i Księżyca nie zachowują skali.",
+    "videoNote": "Artystyczne ujęcia grawitacji: jabłko spada pionowo, rzucony kamień spada po łuku, a z orbity widać Ziemię — statek wciąż spada, ale porusza się w bok tak szybko, że ją mija. Ruch jest poglądowy.",
     "interaction": "Obejrzyj orbitę",
     "control": "Położenie na orbicie",
     "unit": "°",
     "min": 0,
     "max": 360,
-    "value": 45
+    "value": 45,
+    "acceptedBy": "user",
+    "acceptedOn": "2026-09-23"
   },
   {
     "id": 4,
@@ -147,13 +149,15 @@
     ],
     "video": "04-ruch",
     "videoStatus": "illustration",
-    "videoNote": "Uproszczona wizualizacja zderzenia; film nie służy do pomiaru pędu ani energii.",
+    "videoNote": "Artystyczne ilustracje przekazywania pędu: kamień curlingowy, bila i kula kręglowa oddają ruch innym ciałom. Ujęcia są poglądowe — film nie służy do pomiaru pędu ani energii.",
     "interaction": "Porównaj zderzenia",
     "control": "Sprężystość zderzenia",
     "unit": "",
     "min": 0,
     "max": 1,
-    "value": 1
+    "value": 1,
+    "acceptedBy": "user",
+    "acceptedOn": "2026-09-23"
   },
   {
     "id": 5,
@@ -182,13 +186,15 @@
     ],
     "video": "05-energia",
     "videoStatus": "illustration",
-    "videoNote": "Wahadło ilustruje przemianę energii potencjalnej i kinetycznej. Ruch nie jest pomiarem.",
+    "videoNote": "Artystyczne przykłady przemian energii: spadająca woda obraca koło młyńskie, ogień zamienia energię chemiczną w ciepło i światło, maszyna parowa zamienia ciepło w ruch. Film nie jest pomiarem.",
     "interaction": "Sprawdź bilans energii",
     "control": "Sprawność umownego urządzenia",
     "unit": "%",
     "min": 10,
     "max": 90,
-    "value": 65
+    "value": 65,
+    "acceptedBy": "user",
+    "acceptedOn": "2026-09-23"
   },
   {
     "id": 6,
@@ -217,7 +223,7 @@
     ],
     "video": "06-elektrycznosc",
     "videoStatus": "illustration",
-    "videoNote": "Artystyczna ilustracja działania obwodu elektrycznego. Mechanika wyłącznika jest umowna; film nie jest dokładnym schematem technicznym.",
+    "videoNote": "Artystyczne ujęcia elektryczności: wyładowanie w chmurze burzowej, linia przesyłowa nad doliną i żarzące się włókno żarówki. Film nie pokazuje ruchu ładunków w przewodach.",
     "interaction": "Zasil obwód",
     "control": "Napięcie źródła",
     "unit": "V",
@@ -225,7 +231,7 @@
     "max": 12,
     "value": 6,
     "acceptedBy": "user",
-    "acceptedOn": "2026-09-13"
+    "acceptedOn": "2026-09-23"
   },
   {
     "id": 7,
@@ -254,13 +260,15 @@
     ],
     "video": "07-magnetyzm",
     "videoStatus": "illustration",
-    "videoNote": "Świetlne linie to umowny zapis pola, nie widoczne struktury otaczające magnes.",
+    "videoNote": "Artystyczne ujęcia magnetyzmu: opiłki żelaza układają się wzdłuż linii pola magnesu ukrytego pod kartką, igła kompasu ustawia się w jednym kierunku, a nad zamarzniętym jeziorem faluje zorza polarna.",
     "interaction": "Obróć magnes",
     "control": "Orientacja dipola",
     "unit": "°",
     "min": -90,
     "max": 90,
-    "value": 0
+    "value": 0,
+    "acceptedBy": "user",
+    "acceptedOn": "2026-09-23"
   },
   {
     "id": 8,
@@ -289,13 +297,15 @@
     ],
     "video": "08-materia",
     "videoStatus": "illustration",
-    "videoNote": "Trzy osobne próbki; wielkości, odległości i ruch pokazano umownie.",
+    "videoNote": "Ta sama woda w trzech stanach: topniejąca kostka lodu, wrząca woda i szron narastający na zimnej szybie. Ujęcia są poglądowe; film nie pokazuje cząsteczek.",
     "interaction": "Porównaj układ cząsteczek",
     "control": "Stan: stały · ciekły · gazowy",
     "unit": "",
     "min": 0,
     "max": 2,
-    "value": 0
+    "value": 0,
+    "acceptedBy": "user",
+    "acceptedOn": "2026-09-23"
   },
   {
     "id": 9,
@@ -371,7 +381,7 @@
     ],
     "video": "10-ai",
     "videoStatus": "illustration",
-    "videoNote": "Artystyczna ilustracja sieci i tokenów. Napisy i procenty nie są wynikami pomiarów ani zapisem działania modelu.",
+    "videoNote": "Artystyczne skojarzenia: zbiory tekstów, maszyna pisząca znak po znaku (tekst na papierze celowo nieczytelny) i serwerownia. Film nie pokazuje, jak działa model językowy.",
     "interaction": "Zmień kontekst zdania",
     "control": "Kontekst: budowla · mechanizm",
     "unit": "",
@@ -379,6 +389,6 @@
     "max": 1,
     "value": 0,
     "acceptedBy": "user",
-    "acceptedOn": "2026-09-13"
+    "acceptedOn": "2026-09-23"
   }
 ]
