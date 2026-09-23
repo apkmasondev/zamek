@@ -1,5 +1,12 @@
 # Zmiany
 
+## 2.2 — wrzesień 2026
+
+- Jezioro odbija wzgórza ciemną zielenią: jasny, wyblakły pas wzdłuż brzegów znikł (odbicie nie dostaje już stałej domieszki szarości).
+- Łąka schodzi zielenią aż do wody, a na linii brzegu leży wąski pas mokrej, ciemniejszej ziemi.
+- Przerzedzony zagajnik między placem a domkiem; drzewa przy trasie stoją co najmniej 10 m od siebie.
+- Na trawniku przed wschodnim skrzydłem niskie krzewy zamiast drzewa.
+
 ## 2.1 — wrzesień 2026
 
 ### Filmy

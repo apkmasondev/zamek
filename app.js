@@ -237,7 +237,7 @@ async function init(){try{
  entranceGates=createEntranceGates(castle,scene,()=>{renderer.shadowMap.needsUpdate=true;});
  flagWind=createFlagWind(castle);
  const waterNormal=await new THREE.TextureLoader().loadAsync('models/pass2-water-normal.png');waterNormal.wrapS=waterNormal.wrapT=THREE.RepeatWrapping;
- lake=new Water(new THREE.PlaneGeometry(2400,2400),{textureWidth:768,textureHeight:768,waterNormals:waterNormal,sunDirection:SUN_DAY.clone(),sunColor:0xffe0b5,waterColor:0x16323d,distortionScale:2.2,fog:true});lake.name='Reflective alpine lake';lake.rotation.x=-Math.PI/2;lake.position.y=-18.82;scene.add(lake);
+ lake=new Water(new THREE.PlaneGeometry(2400,2400),{textureWidth:768,textureHeight:768,waterNormals:waterNormal,sunDirection:SUN_DAY.clone(),sunColor:0xffe0b5,waterColor:0x16323d,distortionScale:2.2,fog:true});lake.name='Reflective alpine lake';/* three.js Water adds a flat 0.1 grey to every reflection: dark hills mirrored as a pale band along the shores. */lake.material.fragmentShader=lake.material.fragmentShader.replace('vec3( 0.1 ) + reflectionSample * 0.9','reflectionSample * 0.9');lake.rotation.x=-Math.PI/2;lake.position.y=-18.82;scene.add(lake);
  composer=new EffectComposer(renderer);composer.addPass(new RenderPass(scene,camera));aoPass=new SSAOPass(scene,camera,innerWidth,innerHeight,16);aoPass.kernelRadius=1.1;aoPass.minDistance=.0001;aoPass.maxDistance=.025;composer.addPass(aoPass);composer.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),.16,.35,.9));composer.addPass(new OutputPass());
  eveningLighting=createEveningLighting({scene,renderer,localLights,castle,haloMap:createLanternHalo(),surfaces});
  updateLights();

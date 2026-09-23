@@ -4,7 +4,7 @@ Interaktywna podróż 3D po zamku-muzeum nad górskim jeziorem. Dziesięć komna
 
 **Zwiedzaj:** https://apkmason.dev/zamek/
 
-Wersja 2.1 — zmiany opisuje [CHANGELOG.md](CHANGELOG.md). Poprzednią wersję (1.0) można pobrać z zakładki [Releases](https://github.com/apkmasondev/zamek/releases/tag/v1.0).
+Wersja 2.2 — zmiany opisuje [CHANGELOG.md](CHANGELOG.md). Poprzednią wersję (1.0) można pobrać z zakładki [Releases](https://github.com/apkmasondev/zamek/releases/tag/v1.0).
 
 ## Co znajdziesz w środku
 

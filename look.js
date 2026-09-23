@@ -287,6 +287,10 @@ lkRough=mix(.07,.6,leadMask);lkMetal=0.;
 const LEADED_EMISSIVE = `totalEmissiveRadiance=glass*lkPane*mix(lkWinGlow,vec3(1.35,1.3,1.2),lkInterior);`;
 // Meadows: small-scale mottling so the grass is not a flat colour.
 const MEADOW = `
+// The exported shore colours drift from meadow green to teal-grey over the last 8 m above the lake and read as a faded
+// band from above: keep the green down to the water, then a narrow darker, glossy strip of wet ground at the waterline.
+float lkShore=1.-smoothstep(-13.,-9.,lkPos.y);diffuseColor.b=mix(diffuseColor.b,diffuseColor.g*.52,lkShore);
+float lkWetB=1.-smoothstep(.05,.75,lkPos.y+18.82);diffuseColor.rgb*=1.-.45*lkWetB;
 float lkG=lkFbm(lkPos*vec3(.09,.09,.09));float lkG2=lkNoise(lkPos*vec3(1.3,1.3,1.3));
 diffuseColor.rgb*=mix(vec3(.78,.86,.72),vec3(1.12,1.06,.92),lkG)*(.9+.2*lkG2);
 // Distant slopes: stands of spruce and bare rock, so the hills read as landscape rather than smooth domes.
@@ -295,7 +299,7 @@ float lkWood=smoothstep(.47,.58,lkFbm(lkPos*vec3(.011,.02,.011))+.12*lkNoise(lkP
 diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.018,.036,.02)*(.7+.6*lkNoise(lkPos*.35)),lkWood*.92);
 float lkSteep=(1.-smoothstep(.62,.8,lkNrm.y))*lkFar;
 diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.16,.15,.13)*(.8+.4*lkNoise(lkPos*.2)),lkSteep*.85);
-lkRoughOff=lkWood*.1;
+lkRoughOff=lkWood*.1-lkWetB*.35;
 `;
 const SLATE = `
 float lkS=lkFbm(lkPos*vec3(.21,.3,.21));
@@ -412,7 +416,9 @@ export function dressSurfaces(castle, renderer, tex = null) {
     else if (tex && name === 'Slate · blue grey') photo(tex.roof, {tint: [.3, .35, .44], normalStrength: 1.2, sides: 1, desat: .65}, 'lk-roof-photo', '', SLATE);
     else if (tex && name === 'Silhouette · fractured limestone') photo(tex.rock, {tint: [.92, .9, .86], normalStrength: 1.3, desat: .72}, 'lk-rock-photo', '', ROCK_PHOTO);
     else if (tex && name.startsWith('P2 · warm sandstone paving')) { const t = triplanar(tex.paving, {tint: [.8, .74, .67], normalStrength: 1.15, desat: .2}); n = strip(m.clone()); extend(n, 'lk-cobble-photo', {uniforms: t.uniforms, head: t.head, color: COBBLE_COLOR, normal: t.normal}); }
-    else if (tex && name === 'Lake · meadow and weathered shore') { const t = triplanar(tex.grass, {normalStrength: .8, detail: true, aoOnly: true}); n = m.clone(); n.normalMap = null; extend(n, 'lk-meadow-photo', {uniforms: t.uniforms, head: t.head, color: t.color + MEADOW, normal: t.normal}); }
+    // The lake reflection sees the slopes from below the water: light the back faces with the upper normal, so the
+    // hills mirror green instead of a pale band of underside shading.
+    else if (tex && name === 'Lake · meadow and weathered shore') { const t = triplanar(tex.grass, {normalStrength: .8, detail: true, aoOnly: true}); n = m.clone(); n.normalMap = null; extend(n, 'lk-meadow-photo', {uniforms: t.uniforms, head: t.head, color: t.color + MEADOW, normal: t.normal.replace('*faceDirection', '')}); }
     else if (tex && name === 'P2 · garden earth') { const t = triplanar({...tex.grass, scale: 6}, {normalStrength: .8, detail: true, aoOnly: true}); n = m.clone(); n.color.setRGB(.075, .11, .035); n.normalMap = null; extend(n, 'lk-earth-grass', {uniforms: t.uniforms, head: t.head, color: t.color + MEADOW, normal: t.normal}); }
     else if (tex && name === 'P2 · mountain meadow') { const t = triplanar({...tex.grass, scale: 6}, {normalStrength: .8, detail: true, aoOnly: true}); n = m.clone(); n.normalMap = null; extend(n, 'lk-lawn-photo', {uniforms: t.uniforms, head: t.head, color: t.color + MEADOW, normal: t.normal}); }
     else if (name === 'Limestone · warm honed blocks' || name === 'Limestone · carved edges') { n = m.clone(); extend(n, 'lk-stone', {head: PATINA_HEAD, color: STONE + PATINA}); }
