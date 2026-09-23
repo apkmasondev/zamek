@@ -68,7 +68,7 @@
 .fact, .film-note { margin: 14px 0 0; padding-top: 10px; border-top: 1px solid #5e4c3840 }
 .fact p { margin: 3px 0 0; font-size: 16px; line-height: 1.55 }
 .film-note .video-note { margin: 3px 0 2px; font-size: 14px; line-height: 1.5; font-style: italic; color: var(--ink-soft) !important }
-.exhibit-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #5e4c3859 }
+.exhibit-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #5e4c3859 }
 .exhibit-actions .folio-button { flex: 1 0 100%; justify-content: flex-start; flex-direction: column; align-items: flex-start; gap: 0; padding: 9px 16px 10px }
 .folio-button-kicker { font-size: 13px; font-variant-caps: all-small-caps; letter-spacing: .08em; color: #e3c48c }
 #experiment-name { font-size: 18px }
@@ -192,3 +192,26 @@ button.map-label:hover { color: var(--rubric) }
 .accessible .exhibit { left: 5vw; bottom: 90px; width: min(620px, 90vw) }
 .accessible .exhibit .sheet { max-height: calc(100dvh - 170px) }
 .calm .hotspot .orb::after { animation: none }
+
+/* Film on the room screen: two actions side by side on the card; in film mode the card gives way to a caption strip. */
+#scene.over-screen { cursor: zoom-in }
+.film-mode #exhibit, .film-mode #hotspots, .film-mode #landmark { opacity: 0; pointer-events: none; transition: opacity .5s }
+#exhibit, #landmark { transition: opacity .5s }
+.film-mode .vignette { background: radial-gradient(ellipse at 50% 45%, transparent 55%, #03060899 100%), linear-gradient(180deg, #03060866, transparent 18%, transparent 78%, #030608b3) }
+.film-caption { left: 50%; bottom: 5vh; width: min(760px, 88vw); transform: translateX(-50%); z-index: 6; animation: film-in .6s ease-out both }
+.film-caption .sheet { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px 24px; padding: 16px 26px 15px }
+.film-caption .folio-kicker { grid-column: 1 / -1; margin: 0 }
+.film-caption #film-text { margin: 0; font-size: 15px; line-height: 1.5; font-style: italic; color: var(--ink-soft) }
+.film-caption .text-button { white-space: nowrap; align-self: end }
+.film-caption kbd { font-size: 12px; margin-left: 6px }
+@keyframes film-in { from { opacity: 0; transform: translate(-50%, 14px) } to { opacity: 1; transform: translate(-50%, 0) } }
+.film-frame { position: absolute; inset: 0; z-index: 5; display: grid; place-items: center; padding: 70px 10px 190px; background: #05090bd9 }
+.film-frame video { width: 100%; max-height: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: #000; box-shadow: 0 0 0 3px #b8904e, 0 0 0 9px #2a1d10, 0 18px 40px #000c }
+@media (max-width: 600px) {
+  .film-caption { bottom: 60px; width: calc(100vw - 24px) }
+  .film-caption .sheet { grid-template-columns: 1fr; padding: 14px 18px }
+  .film-caption .text-button { justify-self: start; min-height: 40px }
+  .film-caption kbd { display: none }
+}
+@media (prefers-reduced-motion: reduce) { .film-caption { animation: none } }
+@media (hover: none) { .film-caption kbd { display: none } }

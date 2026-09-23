@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
- <meta name="theme-color" content="#0f171b"><meta name="model-bytes" content="22696188"><meta name="description" content="Zamek Tajemnic Rzeczywistości — wędrówka 3D przez dziesięć komnat o prawach natury i informacji.">
+ <meta name="theme-color" content="#0f171b"><meta name="model-bytes" content="15287072"><meta name="description" content="Zamek Tajemnic Rzeczywistości — wędrówka 3D przez dziesięć komnat o prawach natury i informacji.">
  <title>Zamek Tajemnic Rzeczywistości — wędrówka po zamku</title>
  <link rel="icon" type="image/svg+xml" href="mark.svg"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="exhibit-card.css">
  <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/"}}</script>
@@ -53,13 +53,23 @@
    </div>
    <div class="exhibit-actions">
     <button id="experiment-open" class="folio-button"><span class="folio-button-kicker">Zbadaj zjawisko</span><span id="experiment-name"></span></button>
+    <button id="film-open" class="text-button">Obejrzyj film</button>
     <button id="details-open" class="text-button">Szczegóły i źródła</button>
     <button id="reading-toggle" class="text-button" aria-expanded="true">Zwiń opis</button>
    </div>
   </div>
  </section>
+ <div id="film-frame" class="film-frame" hidden></div>
+ <section id="film-caption" class="folio film-caption" hidden aria-label="Film komnaty">
+  <div class="sheet-rim"></div>
+  <div class="sheet">
+   <p class="folio-kicker" id="film-kicker">Film</p>
+   <p id="film-text"></p>
+   <button id="film-close" class="text-button">Wróć do komnaty <kbd>Esc</kbd></button>
+  </div>
+ </section>
  <div id="hotspots" aria-label="Przejścia w przestrzeni"></div>
- <div id="travel" class="travel" hidden><span class="travel-line"></span><p id="travel-label"></p></div>
+ <div id="travel" class="travel" hidden><p id="travel-kicker" class="travel-kicker"></p><p id="travel-label"></p><span class="travel-line"></span><p id="travel-sub" class="travel-sub"></p></div>
  <footer><span id="location-label">Zamek nad jeziorem</span><div class="route-progress" id="route-progress" aria-label="Odwiedzone komnaty"></div><span id="gesture-hint">Przeciągnij, by się rozejrzeć <span aria-hidden="true">↔</span></span></footer>
  <noscript><div class="failure"><h2>Wędrówka wymaga JavaScriptu.</h2><p>Włącz JavaScript w przeglądarce i odśwież stronę, aby zwiedzać zamek w 3D.</p></div></noscript>
  <div id="loading" class="loading"><img src="mark.svg" alt="" width="54"><h2>Otwieramy bramy zamku</h2><p class="loading-sub">Zamek Tajemnic Rzeczywistości</p><div class="load-track"><span id="load-bar"></span></div><p id="load-text">Przygotowywanie przestrzeni…</p></div>
@@ -117,12 +127,14 @@
     <li><svg viewBox="0 0 34 34" aria-hidden="true"><path d="M6 17h22M10 13l-4 4 4 4M24 13l4 4-4 4"/></svg><span><b>Przeciągnij</b> obraz, aby rozejrzeć się w miejscu, w którym stoisz.</span></li>
     <li><svg viewBox="0 0 34 34" aria-hidden="true"><path d="M5 9l7-3 10 3.5 7-3v19l-7 3-10-3.5-7 3z"/><path d="M12 6v19M22 9.5v19"/></svg><span><b>Plan zamku</b> (klawisz <kbd>M</kbd>) przenosi do dowolnej komnaty. <kbd>Esc</kbd> zamyka okno.</span></li>
     <li><svg viewBox="0 0 34 34" aria-hidden="true"><path d="M9 5h16v24H9z"/><path d="M13 11h8M13 15h8M13 19h5"/></svg><span>W każdej komnacie <b>karta</b> wyjaśnia zjawisko, a przycisk <b>Zbadaj zjawisko</b> otwiera doświadczenie z suwakiem.</span></li>
+    <li><svg viewBox="0 0 34 34" aria-hidden="true"><rect x="4" y="8" width="26" height="17" rx="1"/><path class="lamp" d="M14 12.5l7 4-7 4z"/></svg><span><b>Obejrzyj film</b> na karcie albo kliknij ekran w komnacie: sala przygasa, a film wypełnia widok. <kbd>Esc</kbd> wraca do komnaty.</span></li>
+    <li><svg viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="11"/><ellipse cx="17" cy="17" rx="11" ry="4"/><circle class="lamp" cx="17" cy="17" r="2.5"/></svg><span>W <b>Obserwatorium</b> na sferze armilarnej zapala się medalion każdej odwiedzonej komnaty.</span></li>
    </ul>
    <p>Wystawa łączy architekturę, przestrzenne artefakty i sprawdzone źródła. Zwiedzaj we własnym rytmie — nie ma punktów ani limitu czasu.</p>
    <h3>Ustawienia</h3>
    <label class="setting"><input type="checkbox" id="reduced-motion"> Spokojne przejścia bez ruchu kamery</label>
    <label class="setting"><input type="checkbox" id="high-quality" checked> Wysoka jakość obrazu</label>
-   <p class="small">Filmy w komnatach są wizualizacjami generatywnymi, nie nagraniami eksperymentów. Ograniczenia każdego filmu opisano przy odpowiedniej komnacie.</p>
+   <p class="small">Filmy w komnatach są wizualizacjami generatywnymi, nie nagraniami eksperymentów. Ograniczenia każdego filmu opisano przy odpowiedniej komnacie. Faktury kamienia, łupku, skał i traw: <a href="https://polyhaven.com" target="_blank" rel="noopener noreferrer">Poly Haven</a> (CC0).</p>
   </div>
  </dialog>
  <div id="sr-announcement" class="sr-only" role="status"></div>

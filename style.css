@@ -58,14 +58,22 @@ nav svg { width: 22px; height: 22px; flex: none; fill: none; stroke: currentColo
 .hotspot.directional .orb { background: radial-gradient(circle, #1a120ab3 0 60%, #1a120a99) }
 .hotspot.directional .orb::before { content: "↙"; position: absolute; inset: 0; display: grid; place-items: center; font-size: 17px; color: #ffe2a6 }
 
-.travel { position: absolute; bottom: 15vh; left: 50%; transform: translateX(-50%); text-align: center; pointer-events: none; text-shadow: 0 1px 10px #000c }
-.travel p { margin: 10px 0 0; font-size: 17px; font-variant-caps: all-small-caps; letter-spacing: .08em; color: #f4e7cb }
-.travel-line { display: block; width: 90px; height: 1px; margin: auto; background: linear-gradient(90deg, transparent, var(--brass-light), transparent) }
+.travel { position: absolute; bottom: 13vh; left: 50%; transform: translateX(-50%); width: min(90vw, 760px); text-align: center; pointer-events: none; text-shadow: 0 1px 14px #000, 0 0 30px #0008; animation: travel-in 1.4s ease-out .5s both }
+.travel p { margin: 0; color: #f4e7cb }
+.travel-kicker { font-size: 15px; font-variant-caps: all-small-caps; letter-spacing: .14em; color: var(--brass-light) !important }
+#travel-label { font-size: 22px; letter-spacing: .02em; line-height: 1.15 }
+.travel.room #travel-label { font-size: clamp(34px, 5vw, 56px); letter-spacing: -.01em; margin-top: 2px }
+.travel-sub { margin-top: 8px !important; font-style: italic; font-size: 18px; color: #e3d5b8 !important }
+.travel-line { display: block; width: 120px; height: 1px; margin: 12px auto 0; background: linear-gradient(90deg, transparent, var(--brass-light), transparent) }
+.travel:not(.room) .travel-line { margin-top: 8px }
+.travel.quick { animation-duration: .3s; animation-delay: 0s }
+@keyframes travel-in { from { opacity: 0; transform: translate(-50%, 10px) } to { opacity: 1; transform: translate(-50%, 0) } }
 
 footer { position: absolute; left: 3.2vw; right: 3.2vw; bottom: 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; z-index: 5; pointer-events: none; color: #e8dcc4; text-shadow: 0 1px 8px #000c }
 #location-label, #gesture-hint { font-size: 14px; font-variant-caps: all-small-caps; letter-spacing: .06em }
 #gesture-hint span { margin-left: 8px }
-.route-progress { display: flex; gap: 9px }
+/* Centred on the screen's axis (the travel title sits on it), whatever the widths of the texts on either side. */
+.route-progress { display: flex; gap: 9px; position: absolute; left: 50%; transform: translateX(-50%) }
 .route-progress span { width: 8px; height: 8px; transform: rotate(45deg); border: 1px solid #e8d4a680; background: transparent }
 .route-progress span.visited { background: var(--brass); border-color: var(--brass) }
 .route-progress span.current { background: var(--lamp); border-color: #fff1d2; box-shadow: 0 0 10px #ffd48f }
@@ -111,7 +119,7 @@ footer { position: absolute; left: 3.2vw; right: 3.2vw; bottom: 22px; display: f
   #gesture-hint { display: none }
   footer { left: 16px; right: 16px; bottom: 18px }
   #location-label { font-size: 12px }
-  .route-progress { gap: 6px }
+  .route-progress { gap: 6px; position: static; transform: none }
   .route-progress span { width: 6px; height: 6px }
   .hotspot span:last-child { font-size: 12.5px }
   .hotspot .orb { width: 32px; height: 32px }
