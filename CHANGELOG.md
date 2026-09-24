@@ -1,5 +1,12 @@
 # Zmiany
 
+## 2.3 — wrzesień 2026
+
+- Fontanna na Dziedzińcu Harmonii tryska: strumień z czaszy, strużki spływające do basenu i zmarszczki na wodzie (przy spokojnych przejściach woda stoi).
+- Domek recepcji z oknami ze szkła ołowianego w kamiennych obramieniach, cokołem, narożnikami z bloków, gzymsem i kominem; przy drzwiach dwie latarnie, które wieczorem świecą razem z oknami.
+- Rabata przed domkiem obsadzona lawendą i bukszpanem zamiast płaskich liści i krzewów z gładkich kul.
+- Drzewka na dziedzińcu z pełniejszymi, ciemniejszymi koronami; chłodne światło dziedzińca wisi teraz nad fontanną i nie prześwietla już koron.
+
 ## 2.2 — wrzesień 2026
 
 - Jezioro odbija wzgórza ciemną zielenią: jasny, wyblakły pas wzdłuż brzegów znikł (odbicie nie dostaje już stałej domieszki szarości).

@@ -11,6 +11,7 @@ import {drawExperiment,explanation,formatPl} from './science.js';
 import {initMusic} from './music.js';
 import {createEntranceGates} from './gates.js';
 import {createFlagWind} from './flags.js';
+import {createFountain} from './fountain.js';
 import {dressSurfaces,createAtmosphere,createInteriorEnvironment,loadTextureSets,SKY_MODES} from './look.js';
 import {RectAreaLightUniformsLib} from 'three/addons/lights/RectAreaLightUniformsLib.js';
 import {createEveningLighting,createLanternHalo} from './evening.js';
@@ -181,7 +182,7 @@ function updateMove(now){if(!move)return;const t=Math.min(1,(now-move.start)/mov
 // Point at distance d along the walk; beyond the end it continues in the direction of the last segment.
 function pathPoint(m,d){const n=m.points.length;if(d>=m.total){const a=m.points[Math.max(0,n-2)],b=m.points[n-1],dir=b.clone().sub(a),len=dir.length();return len>1e-4?b.clone().addScaledVector(dir,(d-m.total)/len):b.clone();}let i=1;while(i<n-1&&m.distances[i]<d)i++;const f=(d-m.distances[i-1])/Math.max(.0001,m.distances[i]-m.distances[i-1]);return m.points[i-1].clone().lerp(m.points[i],f);}
 function finishTravel(){current=move.target;camera.position.copy(nodeDefs[current].p);lookBase.copy(viewTarget(current));camera.lookAt(lookBase);move=null;traveling=false;$('scene').style.opacity='1';document.body.classList.remove('cinematic');$('travel').hidden=true;updateUI();updateLights();}
-let observatory,sun,hemisphere,localLights=[],flagWind,keySpot,screenLight,atmosphere,surfaces,interiorEnv,skyMode=null;
+let observatory,sun,hemisphere,localLights=[],flagWind,fountain,keySpot,screenLight,atmosphere,surfaces,interiorEnv,skyMode=null;
 const SUN_DAY=SKY_MODES.day.sun;
 const isOutside=key=>['gate','arrival','exit','belvedere'].includes(key);
 function updateLights(key=current){if(!renderer)return;const outside=isOutside(key),station=typeof key==='number'?stations[key-1]:null;
@@ -193,7 +194,8 @@ function updateLights(key=current){if(!renderer)return;const outside=isOutside(k
  surfaces.set({interior:!outside,starGlow:outside?.1:.32});
  const p=station?station.position:key==='hall'?[0,-34]:key==='finale'?[0,28]:key==='court'?[0,4]:[0,0];
  // Room rig: warm wall wash from the entrance side, a cool counter-light and a halo in the room colour.
- const placements=station?[[p[0]+(p[0]>0?-7:7),p[1]-6,7.5],[p[0]+(p[0]>0?7:-7),p[1]+4,6],[p[0],p[1]+5.5,3.5]]:[[p[0]-4,p[1]-3,7],[p[0]+5,p[1]+3,6],[p[0],p[1]+6,4]];
+ // In the courtyard the cool counter-light hangs high over the fountain: at (5, 7, 6) it sat in a tree crown and bleached it.
+ const placements=station?[[p[0]+(p[0]>0?-7:7),p[1]-6,7.5],[p[0]+(p[0]>0?7:-7),p[1]+4,6],[p[0],p[1]+5.5,3.5]]:key==='court'?[[p[0]-4,p[1]-3,7],[p[0]+1.5,p[1]-3,8.5],[p[0],p[1]+6,4]]:[[p[0]-4,p[1]-3,7],[p[0]+5,p[1]+3,6],[p[0],p[1]+6,4]];
  const palettes={1:['#ffe6c4','#a9c8ec',260,120],2:['#ffd3a4','#9db8d6',240,90],3:['#d7e5ff','#86aee0',200,130],4:['#ffe0b8','#c2d2de',250,100],5:['#ffc98c','#a2a7c0',260,80],6:['#dbeaf6','#9ad4e0',230,120],7:['#ddd6ff','#93c3cf',200,120],8:['#eef3ea','#b8dcdb',260,140],9:['#e3efc4','#9ccdbb',240,120],10:['#ead9b8','#94b3d6',210,110]};
  const palette=palettes[key]||(key==='hall'?['#ffd9a8','#9fbfe4',520,220]:['#ffd49c','#b8dafa',420,200]);
  localLights.forEach((l,i)=>{l.position.copy(w(...placements[i]));l.color.set(i<2?palette[i]:station?.color||'#ffd49c');l.distance=station?26:35;l.intensity=outside?0:i===0?palette[2]:i===1?palette[3]:station?60:110;});
@@ -235,7 +237,7 @@ async function init(){try{
  let brass=null;castle.traverse(o=>{if(o.isMesh&&!brass){const m=[o.material].flat().find(m=>m.name==='Brass · polished inlay');if(m)brass=m;}});
  observatory=createObservatory(scene,stations,brass);dressExhibits(scene,brass);
  entranceGates=createEntranceGates(castle,scene,()=>{renderer.shadowMap.needsUpdate=true;});
- flagWind=createFlagWind(castle);
+ flagWind=createFlagWind(castle);fountain=createFountain(scene,renderer);
  const waterNormal=await new THREE.TextureLoader().loadAsync('models/pass2-water-normal.png');waterNormal.wrapS=waterNormal.wrapT=THREE.RepeatWrapping;
  lake=new Water(new THREE.PlaneGeometry(2400,2400),{textureWidth:768,textureHeight:768,waterNormals:waterNormal,sunDirection:SUN_DAY.clone(),sunColor:0xffe0b5,waterColor:0x16323d,distortionScale:2.2,fog:true});lake.name='Reflective alpine lake';/* three.js Water adds a flat 0.1 grey to every reflection: dark hills mirrored as a pale band along the shores. */lake.material.fragmentShader=lake.material.fragmentShader.replace('vec3( 0.1 ) + reflectionSample * 0.9','reflectionSample * 0.9');lake.rotation.x=-Math.PI/2;lake.position.y=-18.82;scene.add(lake);
  composer=new EffectComposer(renderer);composer.addPass(new RenderPass(scene,camera));aoPass=new SSAOPass(scene,camera,innerWidth,innerHeight,16);aoPass.kernelRadius=1.1;aoPass.minDistance=.0001;aoPass.maxDistance=.025;composer.addPass(aoPass);composer.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),.16,.35,.9));composer.addPass(new OutputPass());
@@ -287,7 +289,7 @@ function updateScreenLight(now,dt){if(!screenLight||!screenLight.intensity)retur
 function animate(now){if(document.hidden){lastTime=now;return;}const dt=Math.min(.1,(now-(lastTime||now))/1000);lastTime=now;worldTime+=dt;frameTimes.push(dt);if(frameTimes.length>120)frameTimes.shift();
  if(lake&&!reduced)lake.material.uniforms.time.value+=dt*.3;
  entranceGates?.update(now,reduced);
- flagWind?.update(worldTime,reduced);
+ flagWind?.update(worldTime,reduced);fountain?.update(worldTime,reduced,camera,evening);
  if(move)updateMove(now);else if(camTween)updateCamTween(now);else{
   // On the title view the camera circles the castle by a few degrees, slowly enough to read as a breath of wind.
   if(current==='gate'&&!reduced){const o=nodeDefs.gate.p.clone().sub(nodeDefs.gate.target).applyAxisAngle(new THREE.Vector3(0,1,0),Math.sin(worldTime*.04)*.075);camera.position.copy(nodeDefs.gate.target).add(o);camera.position.y+=Math.sin(worldTime*.06)*.8;}

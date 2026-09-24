@@ -4,7 +4,7 @@ Interaktywna podróż 3D po zamku-muzeum nad górskim jeziorem. Dziesięć komna
 
 **Zwiedzaj:** https://apkmason.dev/zamek/
 
-Wersja 2.2 — zmiany opisuje [CHANGELOG.md](CHANGELOG.md). Poprzednią wersję (1.0) można pobrać z zakładki [Releases](https://github.com/apkmasondev/zamek/releases/tag/v1.0).
+Wersja 2.3 — zmiany opisuje [CHANGELOG.md](CHANGELOG.md). Poprzednią wersję (1.0) można pobrać z zakładki [Releases](https://github.com/apkmasondev/zamek/releases/tag/v1.0).
 
 ## Co znajdziesz w środku
 
@@ -44,7 +44,7 @@ Repozytorium zawiera wyłącznie pliki potrzebne do działania strony:
 | `index.html`, `style.css`, `exhibit-card.css` | strona i wygląd interfejsu |
 | `app.js` | spacer, kamera, światło, tryb filmu |
 | `look.js` | niebo, góry, materiały i faktury liczone w przeglądarce |
-| `observatory.js`, `exhibits.js` | sfera armilarna finału, latarnia w komnacie Światło |
+| `observatory.js`, `exhibits.js`, `fountain.js` | sfera armilarna finału, latarnia w komnacie Światło, woda fontanny na dziedzińcu |
 | `science.js` | doświadczenia i ich modele liczbowe |
 | `evening.js`, `lanterns.js`, `gates.js`, `flags.js`, `music.js`, `paper.js` | wieczór, wrota, chorągwie, muzyka, papierowe karty |
 | `stations.json` | treści komnat i źródła |

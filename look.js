@@ -345,6 +345,9 @@ lkRoughOff=(1.-lkB)*.14+(lkB2-.5)*.06;
 const LEAF = `
 float lkL=lkHash(floor(lkPos*3.)+.5);
 diffuseColor.rgb*=vec3(.82+.36*lkL,.9+.24*lkL,.78+.2*lkNoise(lkPos*.4));
+// In the bright, enclosed courtyard (Blender |x| < 11.5, -41 < y < 46) sunlit crowns washed out to mint: deeper, richer green.
+float lkCourt=step(abs(lkPos.x),11.5)*step(-46.,lkPos.z)*step(lkPos.z,41.);
+diffuseColor.rgb=mix(diffuseColor.rgb,mix(vec3(dot(diffuseColor.rgb,vec3(.3,.55,.15))),diffuseColor.rgb,1.3)*.7,lkCourt);
 `;
 
 // Room banners were flat blue rectangles. Each banner (a connected piece of the merged mesh) gets its own
